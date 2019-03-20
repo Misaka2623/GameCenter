@@ -1,0 +1,11 @@
+div#container {
+
+}
+
+div#container .square {
+    background-image: url("image/bg_mario.png");
+    border-color: black;
+    border-width: 5px;
+    width: 95px;
+    height: 95px;
+}
