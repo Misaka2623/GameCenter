@@ -1,11 +1,26 @@
-div#container {
+body {
+    margin: 0;
+    padding: 0;
+}
 
+div#container {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }
 
 div#container .square {
-    background-image: url("image/bg_mario.png");
-    border-color: black;
-    border-width: 5px;
-    width: 95px;
-    height: 95px;
+    background-image: url("image/bg_mario.jpg");
+    border: 5px solid black;
+    width: 90px;
+    height: 90px;
+    display: inline-block;
+    text-align: center;
+    line-height: 90px;
+    font-family: cursive;
+    font-size: 40pt;
+}
+
+#square_1_0 {
+    background-position: -100px 0;
 }

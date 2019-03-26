@@ -1,4 +1,4 @@
-(function () {
+(function() {
   class Board {
     constructor() {
       this._value = new Array(SIZE ** 2);
@@ -19,27 +19,27 @@
       this._x = x;
       this._y = y;
 
-      this._value = document.createElement("div");
-      this._value.id = "square_" + x + "_" + "_y";
-      this._value.className = "square";
+      this._value = document.createElement('div');
+      this._value.id = 'square_' + x + '_' + y;
+      this._value.className = 'square';
 
       let offsetX = x * -100;
       let offsetY = y * -100;
-      this._value.style.backgroundPosition = x + "px " + y + "px";
-      this._value.style.width = "95px";
+      this._value.style.backgroundPosition = offsetX + 'px ' + offsetY + 'px';
+      this._value.innerHTML = x + SIZE * y;
 
-      document.getElementById("container").appendChild(this._value);
+      document.getElementById('container').appendChild(this._value);
     }
   }
 
   let SIZE = 4;
 
-  window.addEventListener("load", main);
+  window.addEventListener('load', main);
 
   function main() {
-    let container = document.getElementById("container");
-    container.style.width = (SIZE - 1) * 100 + "px";
-    container.style.height = (SIZE - 1) * 100 + "px";
+    let container = document.getElementById('container');
+    container.style.width = SIZE * 100 + 'px';
+    container.style.height = SIZE * 100 + 'px';
     let board = new Board();
   }
 })();
