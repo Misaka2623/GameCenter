@@ -1,26 +1,22 @@
 body {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
-div#container {
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
+#board {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-div#container .square {
-    background-image: url("image/bg_mario.jpg");
-    border: 5px solid black;
-    width: 90px;
-    height: 90px;
-    display: inline-block;
-    text-align: center;
-    line-height: 90px;
-    font-family: cursive;
-    font-size: 40pt;
-}
-
-#square_1_0 {
-    background-position: -100px 0;
+.square {
+  background-image: url("image/bg_mario.jpg");
+  border: 5px solid black;
+  display: inline-block;
+  font-family: cursive;
+  font-size: 40pt;
+  height: 90px;
+  line-height: 90px;
+  text-align: center;
+  width: 90px;
 }
