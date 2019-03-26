@@ -4,7 +4,6 @@ body {
 }
 
 #board {
-  display: block;
   margin-left: auto;
   margin-right: auto;
 }
@@ -12,6 +11,7 @@ body {
 .square {
   background-image: url("image/bg_mario.jpg");
   border: 5px solid black;
+  cursor: default;
   display: inline-block;
   font-family: cursive;
   font-size: 40pt;
@@ -19,4 +19,9 @@ body {
   line-height: 90px;
   text-align: center;
   width: 90px;
+}
+
+#square_15 {
+  background: none;
+  border: 5px solid;
 }

@@ -1,8 +1,23 @@
+/*jshint esversion: 7 */
+
 (function() {
+  'use strict';
+
+  // TODO: shuffle
+
   /**
-   * @type {number} the size of the puzzle board.
+   * The size of the puzzle board.
+   *
+   * @type {number}
    */
-  const SIZE = 4;
+  const BOARD_SIZE = 4;
+
+  /**
+   * The size of the square in the board (in pixel).
+   *
+   * @type {number}
+   */
+  const SQUARE_SIZE = 100;
 
   /**
    * An instance of this class refers a board of the 15 puzzle game.
@@ -12,56 +27,129 @@
      * Constructs a Board object.
      */
     constructor() {
-      this._value = new Array(SIZE ** 2);
-      for (let y = 0; y < SIZE; y++) {
-        for (let x = 0; x < SIZE; x++) {
-          this._value.push(new Square(x, y));
+      /**
+       * An array contains the order of the squares on the board.
+       *
+       * @const
+       * @type {number[]}
+       * @private
+       */
+      this.orders_ = Array.from(new Array(BOARD_SIZE * BOARD_SIZE),
+          (value, index) => index);
+
+      /**
+       * An array contains all the squares on the board.
+       *
+       * @const
+       * @type {HTMLElement[]}
+       * @private
+       */
+      this.data_ = [];
+
+      for (let y = 0; y < BOARD_SIZE; y++) {
+        for (let x = 0; x < BOARD_SIZE; x++) {
+          this.addSquare(x, y);
+        }
+      }
+    }
+
+    addSquare(x, y) {
+      const ordinal = x + y * BOARD_SIZE;
+
+      const square = document.createElement('div');
+      square.className = 'square';
+      square.id = `square_${ordinal}`;
+      square.addEventListener('click', () => {
+        if (this.isAbleToMove(ordinal)) {
+          this.swap(this.indexOf(ordinal),
+              this.indexOf(this.orders_.length - 1));
+        }
+      });
+
+      if (x === BOARD_SIZE - 1 && y === BOARD_SIZE - 1) {
+        square.innerHTML = '　';
+        square.style.borderColor = 'black white white black';
+      } else {
+        square.innerHTML = ordinal;
+        square.style.backgroundPosition = `${x * -100}px ${y * -100}px`;
+
+        square.addEventListener('mouseenter', () => {
+          if (this.isAbleToMove(ordinal)) {
+            square.style.cursor = 'pointer';
+            square.style.borderColor = 'red';
+          }
+        });
+        square.addEventListener('mouseout', () => {
+          square.style.cursor = 'default';
+          square.style.borderColor = 'black';
+        });
+      }
+
+      document.getElementById('board').appendChild(square);
+
+      this.data_.push(square);
+    }
+
+    /**
+     * Gets the index of the specified square in this.orders_.
+     *
+     * @param order {number} the order of the square.
+     * @returns {number} the found index.
+     */
+    indexOf(order) {
+      for (let i = 0; i < this.orders_.length; i++) {
+        if (this.orders_[i] === order) {
+          return i;
         }
       }
     }
 
     /**
-     * Finds the square at the specified position.
+     * Indicates whether the specified square is near the empty square.
      *
-     * @param x {number} the x coordinate of the square.
-     * @param y {number} the y coordinate of the square.
-     * @returns {Square} the found square.
+     * @param order {number} the order of the square.
+     * @returns {boolean} true if the specified square is able to move.
      */
-    find(x, y) {
-      return this._value[y * SIZE + x];
+    isAbleToMove(order) {
+      const index1 = this.indexOf(order);
+      const index2 = this.indexOf(this.orders_.length - 1);
+
+      const x1 = index1 % BOARD_SIZE;
+      const y1 = parseInt(index1 / BOARD_SIZE);
+      const x2 = index2 % BOARD_SIZE;
+      const y2 = parseInt(index2 / BOARD_SIZE);
+
+      return Math.abs(x1 - x2) + Math.abs(y1 - y2) === 1;
     }
-  }
 
-  /**
-   * An instance of this class refers a square in the game board.
-   */
-  class Square {
     /**
-     * Constructs a Square object.
+     * Swaps two squares at specified position.
      *
-     * @param x {number} the x coordinate of this square.
-     * @param y {number} the y coordinate of this square.
+     * @param index1 {number} the index of the first square.
+     * @param index2 {number} the index of the second square.
      */
-    constructor(x, y) {
-      this._x = x;
-      this._y = y;
+    swap(index1, index2) {
+      const item1 = this.orders_[index1];
+      const item2 = this.orders_[index2];
+      this.orders_.splice(index2, 1, item1);
+      this.orders_.splice(index1, 1, item2);
 
-      this._value = document.createElement('div');
-      this._value.id = `square_${x}_${y}`;
-      this._value.className = 'square';
-
-      if (!(x === SIZE - 1 && y === SIZE - 1)) {
-        this._value.innerHTML = x + SIZE * y;
-
-        const offsetX = x * -100;
-        const offsetY = y * -100;
-        this._value.style.backgroundPosition = `${offsetX}px ${offsetY}px`;
-      } else {
-        this._value.style.border = 'none';
-        this._value.style.height = '0';
+      const container = document.getElementById('board');
+      container.innerHTML = '';
+      for (let order of this.orders_) {
+        const square = this.data_[order];
+        container.appendChild(square);
       }
 
-      document.getElementById('board').appendChild(this._value);
+      const index = this.indexOf(this.orders_.length - 1);
+
+      let colors = '';
+      colors += index / BOARD_SIZE < 1 ? 'white ' : 'black ';
+      colors += index % BOARD_SIZE === BOARD_SIZE - 1 ? 'white ' : 'black ';
+      colors += index / BOARD_SIZE >= BOARD_SIZE - 1 ? 'white ' : 'black ';
+      colors += index % BOARD_SIZE === 0 ? 'white' : 'black';
+
+      this.data_[this.orders_.length - 1].style.borderColor = colors;
     }
   }
 
@@ -69,8 +157,8 @@
 
   function main() {
     const container = document.getElementById('board');
-    container.style.width = `${SIZE * 100}px`;
-    container.style.height = `${SIZE * 100}px`;
+    container.style.width = `${BOARD_SIZE * SQUARE_SIZE}px`;
+    container.style.height = `${BOARD_SIZE * SQUARE_SIZE}px`;
     const board = new Board();
   }
 })();
