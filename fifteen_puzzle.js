@@ -106,11 +106,28 @@
           if (this.isAbleToMove(ordinal)) {
             square.style.cursor = 'pointer';
             square.style.borderColor = 'red';
+
+            const empty_square = this.data_[this.data_.length - 1];
+            const square_position = this.indexOf(parseInt(square.innerHTML));
+            const empty_position = this.indexOf(this.data_.length - 1);
+            if (empty_position === square_position - 1) {
+              empty_square.style.borderRightColor = 'red';
+            } else if (empty_position === square_position + 1) {
+              empty_square.style.borderLeftColor = 'red';
+            } else if (empty_position === square_position - BOARD_SIZE) {
+              empty_square.style.borderBottomColor = 'red';
+            } else {
+              empty_square.style.borderTopColor = 'red';
+            }
           }
         });
         square.addEventListener('mouseout', () => {
           square.style.cursor = 'default';
           square.style.borderColor = 'black';
+
+          const empty_style = this.data_[this.data_.length - 1].style;
+          empty_style.borderColor =
+              empty_style.borderColor.replace('red', 'black');
         });
       }
 
