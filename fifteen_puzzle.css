@@ -25,3 +25,12 @@ body {
   background: none;
   border: 5px solid;
 }
+
+#timer-container {
+  margin: 5px;
+  text-align: center;
+}
+
+#timer {
+  text-align: center;
+}

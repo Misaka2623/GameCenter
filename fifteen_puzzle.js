@@ -20,6 +20,20 @@
   const SQUARE_SIZE = 100;
 
   /**
+   * The timer count.
+   *
+   * @type {number}
+   */
+  let aTime = 0;
+
+  /**
+   * The number for stopping the timer.
+   *
+   * @type {number}
+   */
+  let aNumber;
+
+  /**
    * An instance of this class refers a board of the 15 puzzle game.
    */
   class Board {
@@ -73,7 +87,10 @@
               this.indexOf(this.orders_.length - 1));
 
           if (this.isCompleted()) {
-            setTimeout(() => window.alert('win'), 200);
+            const timer = document.getElementById('timer');
+            setTimeout(() =>
+                window.alert(`complete! used ${timer.value}`), 200);
+            clearInterval(aNumber);
           }
         }
       });
@@ -233,5 +250,19 @@
     container.style.height = `${BOARD_SIZE * SQUARE_SIZE}px`;
     const board = new Board();
     board.shuffle();
+    aNumber = setInterval(countTime, 1000);
+  }
+
+  /**
+   * Starts to count the time.
+   */
+  function countTime() {
+    aTime++;
+    const timer = document.getElementById('timer');
+    const second = aTime % 60;
+    const minute = parseInt(aTime / 60) % 60;
+    const hour = parseInt(aTime / 60 / 60);
+    timer.value = `${hour}:${minute < 10 ? 0 : ''}${minute}` +
+        `:${second < 10 ? 0 : ''}${second}`;
   }
 })();
