@@ -5,9 +5,20 @@
 <link href="fifteen_puzzle.css" rel="stylesheet">
 <script src="fifteen_puzzle.js"></script>
 
-<div id="timer-container">
-  <label for="timer" id="timer-label">
-    <input disabled id="timer" value="0:00:00" />
-  </label>
+<div id="main">
+  <div id="timer-container">
+    <label for="timer" id="timer-label">
+      <input disabled id="timer" value="0:00:00" />
+    </label>
+  </div>
+  <div id="board"></div>
+  <div id="start-game-container">
+    <button id="start-game">start game</button>
+  </div>
 </div>
-<div id="board"></div>
+<div id="side">
+  <div id="score-pad">
+    <p>score pad</p>
+    <ul id="scores"></ul>
+  </div>
+</div>

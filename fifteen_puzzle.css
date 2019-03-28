@@ -1,6 +1,7 @@
 body {
   margin: 0;
   padding: 0;
+  display: flex;
 }
 
 #board {
@@ -26,11 +27,16 @@ body {
   border: 5px solid;
 }
 
-#timer-container {
+#timer-container,
+#start-game-container {
   margin: 5px;
   text-align: center;
 }
 
 #timer {
   text-align: center;
+}
+
+#main {
+  width: 70%;
 }

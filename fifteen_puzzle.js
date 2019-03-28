@@ -3,7 +3,8 @@
 (function() {
   'use strict';
 
-  // TODO: shuffle
+  // TODO(sheng): disable after win
+  // TODO(sheng): add to score pad after win
 
   /**
    * The size of the puzzle board.
@@ -160,9 +161,9 @@
         const index2 = this.indexOf(this.orders_.length - 1);
 
         const x1 = index1 % BOARD_SIZE;
-        const y1 = parseInt(index1 / BOARD_SIZE);
+        const y1 = Math.floor(index1 / BOARD_SIZE);
         const x2 = index2 % BOARD_SIZE;
-        const y2 = parseInt(index2 / BOARD_SIZE);
+        const y2 = Math.floor(index2 / BOARD_SIZE);
 
         return Math.abs(x1 - x2) + Math.abs(y1 - y2) === 1;
       } else {
@@ -214,10 +215,10 @@
       for (let i = 0; i < 1000; i++) {
         const index = this.indexOf(this.orders_.length - 1);
         const directions = [];
-        if (parseInt(index / BOARD_SIZE) !== 0) {
+        if (Math.floor(index / BOARD_SIZE) !== 0) {
           directions.push(index - BOARD_SIZE);
         }
-        if (parseInt(index / BOARD_SIZE) !== BOARD_SIZE - 1) {
+        if (Math.floor(index / BOARD_SIZE) !== BOARD_SIZE - 1) {
           directions.push(index + BOARD_SIZE);
         }
         if (index % BOARD_SIZE !== 0) {
@@ -227,7 +228,7 @@
           directions.push(index + 1);
         }
 
-        const random = parseInt(Math.random() * directions.length);
+        const random = Math.floor(Math.random() * directions.length);
         const target = directions[random];
         this.swap(target, index);
       }
@@ -257,6 +258,11 @@
       }
       return true;
     }
+
+    startGame() {
+      this.shuffle();
+      aNumber = setInterval(countTime, 1000);
+    }
   }
 
   window.addEventListener('load', main);
@@ -266,8 +272,8 @@
     container.style.width = `${BOARD_SIZE * SQUARE_SIZE}px`;
     container.style.height = `${BOARD_SIZE * SQUARE_SIZE}px`;
     const board = new Board();
-    board.shuffle();
-    aNumber = setInterval(countTime, 1000);
+    const button = document.getElementById('start-game');
+    button.addEventListener('click', () => board.startGame);
   }
 
   /**
@@ -277,8 +283,8 @@
     aTime++;
     const timer = document.getElementById('timer');
     const second = aTime % 60;
-    const minute = parseInt(aTime / 60) % 60;
-    const hour = parseInt(aTime / 60 / 60);
+    const minute = Math.floor(aTime / 60) % 60;
+    const hour = Math.floor(aTime / 60 / 60);
     timer.value = `${hour}:${minute < 10 ? 0 : ''}${minute}` +
         `:${second < 10 ? 0 : ''}${second}`;
   }
