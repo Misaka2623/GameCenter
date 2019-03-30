@@ -20,12 +20,18 @@ body {
 
 #timer-container,
 #start-game-container {
+  font-family: monospace;
+  font-size: 9pt;
   margin: 5px;
   text-align: center;
 }
 
+#timer-container,
+#start-game-container,
+#start-game-container button,
 #timer {
   font-family: monospace;
+  font-size: 9pt;
   text-align: center;
 }
 
