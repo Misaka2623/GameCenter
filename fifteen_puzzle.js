@@ -1,291 +1,355 @@
-/*jshint esversion: 7 */
-
 (function() {
   'use strict';
 
-  // TODO(sheng): disable after win
-  // TODO(sheng): add to score pad after win
+  // TODO: reset game
 
   /**
-   * The size of the puzzle board.
-   *
+   * The beginning time of the game.
    * @type {number}
    */
-  const BOARD_SIZE = 4;
-
-  /**
-   * The size of the square in the board (in pixel).
-   *
-   * @type {number}
-   */
-  const SQUARE_SIZE = 100;
-
-  /**
-   * The timer count.
-   *
-   * @type {number}
-   */
-  let aTime = 0;
+  let aStartTime;
 
   /**
    * The number for stopping the timer.
-   *
    * @type {number}
    */
   let aNumber;
 
-  /**
-   * An instance of this class refers a board of the 15 puzzle game.
-   */
   class Board {
     /**
-     * Constructs a Board object.
+     * The number of squares at each row and column on the game board.
+     * @const
+     * @type {number}
+     * @private
+     */
+    static _size = 2;
+
+    /**
+     * The width and height of the game board (in px).
+     * @const
+     * @type {number}
+     * @private
+     */
+    static _board_size = 400;
+
+    /**
+     * The total number of squares on the puzzle board.
+     * @const
+     * @type {number}
+     * @private
+     */
+    static _length = Math.pow(Board._size, 2);
+
+    /**
+     * The width and height of the square (in px) including borders.
+     * @const
+     * @type {number}
+     * @private
+     */
+    static _square_size = Board._board_size / Board._size;
+
+    /**
+     * The width of the border of the square (in px).
+     * @const
+     * @type {number}
+     * @private
+     */
+    static _border_width = Board._square_size * 0.05;
+
+    /**
+     * The size of the font in the square on the board (in pt).
+     * @const
+     * @type {number}
+     * @private
+     */
+    static _square_font_size = Board._square_size * 0.4;
+
+    /**
+     * Constructs a Board.
      */
     constructor() {
       /**
-       * An array contains the order of the squares on the board.
-       *
+       * An array contains the order of the ordinal of squares on the game
+       * board.
        * @const
        * @type {number[]}
        * @private
        */
-      this.orders_ = Array.from(new Array(BOARD_SIZE * BOARD_SIZE),
-          (value, index) => index);
+      this._ordinates = [];
 
       /**
-       * An array contains all the squares on the board.
-       *
+       * Stores all html elements of squares on the game board.
        * @const
-       * @type {HTMLElement[]}
+       * @type {Map<number, HTMLDivElement>}
        * @private
        */
-      this.data_ = [];
+      this._data = new Map();
 
-      for (let y = 0; y < BOARD_SIZE; y++) {
-        for (let x = 0; x < BOARD_SIZE; x++) {
-          this.addSquare(x, y);
-        }
-      }
+      const container = document.getElementById('board');
+      container.style.height = `${Board._board_size}px`;
+      container.style.width = `${Board._board_size}px`;
 
-      this.refreshBoard();
+      this._initializeSquares();
+      this._show();
     }
 
     /**
-     * Adds a square into the board.
-     *
-     * @param x {number} the x coordinate of the square.
-     * @param y {number} the y coordinate of the square.
+     * Translates the specified ordinate to coordinate.
+     * @param {number} ordinate the ordinate which should be translated.
+     * @returns {number[]} an array that contains two numbers. The first number
+     * is x coordinate; the second number is y coordinate.
      */
-    addSquare(x, y) {
-      const ordinal = x + y * BOARD_SIZE;
+    static ordinate2coordinate(ordinate) {
+      const index = ordinate - 1;
+      return [index % Board._size, Math.floor(index / Board._size)];
+    }
 
-      const square = document.createElement('div');
-      square.className = 'square';
-      square.id = `square_${ordinal}`;
-      square.addEventListener('click', () => {
-        if (this.isAbleToMove(ordinal)) {
-          this.swap(this.indexOf(ordinal),
-              this.indexOf(this.orders_.length - 1));
+    /**
+     * Translates the specified coordinate to ordinate.
+     * @param {number} x the x coordinate.
+     * @param {number} y the y coordinate.
+     * @returns {number} the translated ordinate.
+     */
+    static coordinate2ordinate = (x, y) => x + y * this._size;
 
-          if (this.isCompleted()) {
-            const timer = document.getElementById('timer');
-            setTimeout(() =>
-                window.alert(`complete! used ${timer.value}`), 200);
-            clearInterval(aNumber);
-          }
-        }
-      });
+    /**
+     * Indicates whether the puzzle is solved.
+     * @returns {boolean} true if the puzzle is solved.
+     */
+    isSolved() {
+      return this._ordinates.filter(
+          (value, index) => value !== index + 1).length === 0;
+    }
 
-      if (x === BOARD_SIZE - 1 && y === BOARD_SIZE - 1) {
-        square.innerHTML = '　';
-        square.style.borderColor = 'black white white black';
-      } else {
-        square.innerHTML = ordinal;
-        square.style.backgroundPosition = `${x * -100}px ${y * -100}px`;
+    /**
+     * Starts the game.
+     */
+    startGame() {
+      aStartTime = Date.now();
+      while (this.isSolved()) {
+        this._shuffle();
+      }
+      aNumber = setInterval(countTime, 1000);
+      document.getElementById('start-game').disabled = true;
+    }
 
-        square.addEventListener('mouseenter', () => {
-          if (this.isAbleToMove(ordinal)) {
-            square.style.cursor = 'pointer';
-            square.style.borderColor = 'red';
+    /**
+     * Ends the game.
+     */
+    endGame() {
+      clearInterval(aNumber);
+      setTimeout(() =>
+          window.alert(`complete! used ${getTimeString()}`), 0);
+      document.getElementById('timer').value = '0:00:00';
+      document.getElementById('start-game').disabled = false;
+      this._initializeSquares();
+      this._show();
+    }
 
-            const empty_square = this.data_[this.data_.length - 1];
-            const square_position = this.indexOf(parseInt(square.innerHTML));
-            const empty_position = this.indexOf(this.data_.length - 1);
-            if (empty_position === square_position - 1) {
-              empty_square.style.borderRightColor = 'red';
-            } else if (empty_position === square_position + 1) {
-              empty_square.style.borderLeftColor = 'red';
-            } else if (empty_position === square_position - BOARD_SIZE) {
-              empty_square.style.borderBottomColor = 'red';
-            } else {
-              empty_square.style.borderTopColor = 'red';
+    /**
+     * Initializes all squares on the board.
+     */
+    _initializeSquares() {
+      this._ordinates.splice(0, this._ordinates.length);
+      for (let ordinate = 1; ordinate <= Board._length; ordinate++) {
+        this._ordinates.push(ordinate);
+      }
+
+      for (const ordinate of this._ordinates) {
+        const coordinate = Board.ordinate2coordinate(ordinate);
+        const x = coordinate[0];
+        const y = coordinate[1];
+
+        const square = document.createElement('div');
+        square.className = 'square';
+        square.id = `square_${ordinate}`;
+
+        square.style.borderWidth = `${Board._border_width}px`;
+        square.style.fontSize = `${Board._square_font_size}pt`;
+        square.style.height =
+            `${Board._square_size - 2 * Board._border_width}px`;
+        square.style.width =
+            `${Board._square_size - 2 * Board._border_width}px`;
+        square.style.lineHeight = square.style.height;
+        square.innerHTML = ordinate.toString();
+
+        if (ordinate === Board._length) {
+          square.style.borderColor = '#000 #fff #fff #000';
+          square.style.background = 'none';
+          square.style.color = '#fff';
+        } else {
+          square.style.borderColor = '#000';
+          square.style.backgroundPosition = `${-1 * x * Board._square_size}px` +
+              ` ${-1 * y * Board._square_size}px`;
+
+          square.addEventListener('click', () => {
+            if (this._isAvailableToMove(ordinate)) {
+              this._swap(this._ordinate2index(ordinate),
+                  this._ordinate2index(Board._length));
+              this._show();
+              if (this.isSolved()) {
+                this.endGame();
+              }
             }
-          }
-        });
-        square.addEventListener('mouseout', () => {
-          square.style.cursor = 'default';
-          square.style.borderColor = 'black';
+          });
+          square.addEventListener('mouseenter', () => {
+            if (this._isAvailableToMove(ordinate)) {
+              square.style.cursor = 'pointer';
+              square.style.borderColor = 'red';
 
-          const empty_style = this.data_[this.data_.length - 1].style;
-          empty_style.borderColor =
-              empty_style.borderColor.replace('red', 'black');
-        });
-      }
-
-      this.data_.push(square);
-    }
-
-    /**
-     * Gets the index of the specified square in this.orders_.
-     *
-     * @param order {number} the order of the square.
-     * @returns {number} the found index.
-     */
-    indexOf(order) {
-      for (let i = 0; i < this.orders_.length; i++) {
-        if (this.orders_[i] === order) {
-          return i;
+              const empty_square = this._data.get(Board._length);
+              const empty_index = this._ordinate2index(Board._length);
+              const square_index = this._ordinate2index(ordinate);
+              if (empty_index === square_index - 1) {
+                empty_square.style.borderRightColor = 'red';
+              } else if (empty_index === square_index + 1) {
+                empty_square.style.borderLeftColor = 'red';
+              } else if (empty_index === square_index - Board._size) {
+                empty_square.style.borderBottomColor = 'red';
+              } else {
+                empty_square.style.borderTopColor = 'red';
+              }
+            }
+          });
+          square.addEventListener('mouseleave', () => {
+            square.style.cursor = 'default';
+            square.style.borderColor = 'black';
+            const empty_style = this._data.get(Board._length).style;
+            empty_style.borderColor =
+                empty_style.borderColor.replace('red', 'black');
+          });
         }
+
+        this._data.set(ordinate, square);
       }
     }
 
     /**
-     * Indicates whether the specified square is near the empty square.
-     *
-     * @param order {number} the order of the square.
-     * @returns {boolean} true if the specified square is able to move.
+     * Shows the game board depending on current set of squares.
+     * @private
      */
-    isAbleToMove(order) {
-      if (this.isLegalPosition(order)) {
-        const index1 = this.indexOf(order);
-        const index2 = this.indexOf(this.orders_.length - 1);
-
-        const x1 = index1 % BOARD_SIZE;
-        const y1 = Math.floor(index1 / BOARD_SIZE);
-        const x2 = index2 % BOARD_SIZE;
-        const y2 = Math.floor(index2 / BOARD_SIZE);
-
-        return Math.abs(x1 - x2) + Math.abs(y1 - y2) === 1;
-      } else {
-        return false;
-      }
-    }
-
-    /**
-     * Swaps two squares at specified position.
-     *
-     * @param index1 {number} the index of the first square.
-     * @param index2 {number} the index of the second square.
-     */
-    swap(index1, index2) {
-      const item1 = this.orders_[index1];
-      const item2 = this.orders_[index2];
-      this.orders_.splice(index2, 1, item1);
-      this.orders_.splice(index1, 1, item2);
-
-      this.refreshBoard();
-    }
-
-    /**
-     * Refreshes the board to match the change.
-     */
-    refreshBoard() {
+    _show() {
       const container = document.getElementById('board');
       container.innerHTML = '';
-      for (let order of this.orders_) {
-        const square = this.data_[order];
-        container.appendChild(square);
+      for (const ordinate of this._ordinates) {
+        container.appendChild(this._data.get(ordinate));
       }
 
-      const index = this.indexOf(this.orders_.length - 1);
+      const index = this._ordinate2index(Board._length);
 
       let colors = '';
-      colors += index / BOARD_SIZE < 1 ? 'white ' : 'black ';
-      colors += index % BOARD_SIZE === BOARD_SIZE - 1 ? 'white ' : 'black ';
-      colors += index / BOARD_SIZE >= BOARD_SIZE - 1 ? 'white ' : 'black ';
-      colors += index % BOARD_SIZE === 0 ? 'white' : 'black';
+      colors += index / Board._size < 1 ? 'white ' : 'black ';
+      colors += index % Board._size === Board._size - 1 ? 'white ' : 'black ';
+      colors += index / Board._size >= Board._size - 1 ? 'white ' : 'black ';
+      colors += index % Board._size === 0 ? 'white' : 'black';
 
-      this.data_[this.orders_.length - 1].style.borderColor = colors;
+      this._data.get(Board._length).style.borderColor = colors;
     }
 
     /**
-     * Shuffles the squares on the board.
+     * Swaps the two squares at specified position.
+     * @param {number} index1 the index of one square.
+     * @param {number} index2 the index of another square.
+     * @private
      */
-    shuffle() {
+    _swap(index1, index2) {
+      const item1 = this._ordinates[index1];
+      const item2 = this._ordinates[index2];
+      this._ordinates.splice(index2, 1, item1);
+      this._ordinates.splice(index1, 1, item2);
+    }
+
+    /**
+     * Translates the specified ordinate to the index that the square at.
+     *
+     * @param {number} ordinate the ordinate of the square.
+     * @returns {number} the index that the square at.
+     * @private
+     */
+    _ordinate2index(ordinate) {
+      return this._ordinates.indexOf(ordinate);
+    }
+
+    /**
+     * Gets the ordinate of the square at specified position.
+     * @param {number} index position that the square at.
+     * @returns {number} the ordinate of the square.
+     * @private
+     */
+    _index2ordinate(index) {
+      return this._ordinates[index];
+    }
+
+    /**
+     * Indicates whether the specified square is available to move.
+     * @param {number} ordinate the ordinate of the square.
+     * @returns {boolean} true if the square is available to move.
+     * @private
+     */
+    _isAvailableToMove(ordinate) {
+      const index = this._ordinate2index(ordinate);
+      const empty = this._ordinate2index(Board._length);
+      return index >= 0 && index + Board._size === empty
+          || index % Board._size !== 0 && index - 1 === empty
+          || index < Board._length && index - Board._size === empty
+          || index % Board._size !== Board._size - 1 && index + 1 === empty;
+    }
+
+    /**
+     * Shuffles the squares randomly.
+     * @private
+     */
+    _shuffle() {
       for (let i = 0; i < 1000; i++) {
-        const index = this.indexOf(this.orders_.length - 1);
+        const index = this._ordinate2index(Board._length);
         const directions = [];
-        if (Math.floor(index / BOARD_SIZE) !== 0) {
-          directions.push(index - BOARD_SIZE);
+        if (Math.floor(index / Board._size) !== 0) {
+          directions.push(index - Board._size);
         }
-        if (Math.floor(index / BOARD_SIZE) !== BOARD_SIZE - 1) {
-          directions.push(index + BOARD_SIZE);
+        if (Math.floor(index / Board._size) !== Board._size - 1) {
+          directions.push(index + Board._size);
         }
-        if (index % BOARD_SIZE !== 0) {
+        if (index % Board._size !== 0) {
           directions.push(index - 1);
         }
-        if (index % BOARD_SIZE !== BOARD_SIZE - 1) {
+        if (index % Board._size !== Board._size - 1) {
           directions.push(index + 1);
         }
 
         const random = Math.floor(Math.random() * directions.length);
         const target = directions[random];
-        this.swap(target, index);
+        this._swap(target, index);
       }
-    }
-
-    /**
-     * Indicates whether the position is a legal position on the board.
-     *
-     * @param position {number} the position on the board.
-     * @returns {boolean} true if the position is a legal position on the board.
-     */
-    isLegalPosition(position) {
-      return 0 <= position && position < this.orders_.length;
-    }
-
-    /**
-     * Indicates whether all squares on the board are at the correct position.
-     *
-     * @returns {boolean} true if all squares on the board are at the correct
-     * position.
-     */
-    isCompleted() {
-      for (let i = 1; i < this.orders_.length; i++) {
-        if (this.orders_[i - 1] + 1 !== this.orders_[i]) {
-          return false;
-        }
-      }
-      return true;
-    }
-
-    startGame() {
-      this.shuffle();
-      aNumber = setInterval(countTime, 1000);
+      this._show();
     }
   }
 
-  window.addEventListener('load', main);
-
-  function main() {
-    const container = document.getElementById('board');
-    container.style.width = `${BOARD_SIZE * SQUARE_SIZE}px`;
-    container.style.height = `${BOARD_SIZE * SQUARE_SIZE}px`;
+  window.addEventListener('load', () => {
     const board = new Board();
     const button = document.getElementById('start-game');
-    button.addEventListener('click', () => board.startGame);
+    button.addEventListener('click', () => board.startGame());
+  });
+
+  /**
+   * Renews the timer on the page.
+   */
+  function countTime() {
+    const timer = document.getElementById('timer');
+    timer.value = getTimeString();
   }
 
   /**
-   * Starts to count the time.
+   * Gets the string form of the time from game started to now.
+   * @returns {string} the string form of the time.
    */
-  function countTime() {
-    aTime++;
-    const timer = document.getElementById('timer');
-    const second = aTime % 60;
-    const minute = Math.floor(aTime / 60) % 60;
-    const hour = Math.floor(aTime / 60 / 60);
-    timer.value = `${hour}:${minute < 10 ? 0 : ''}${minute}` +
+  function getTimeString() {
+    const now = Date.now();
+    const time = Math.floor((now - aStartTime) / 1000);
+    const second = time % 60;
+    const minute = Math.floor(time / 60) % 60;
+    const hour = Math.floor(time / 3600);
+    return `${hour}` +
+        `:${minute < 10 ? 0 : ''}${minute}` +
         `:${second < 10 ? 0 : ''}${second}`;
   }
 })();
