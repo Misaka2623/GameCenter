@@ -15,6 +15,59 @@
    */
   let aNumber;
 
+  /**
+   * A storage for storing the scores.
+   * @static
+   */
+  class ScorePad {
+    /**
+     * The max items that can be shown on the page.
+     * @const
+     * @type {number}
+     * @private
+     */
+    static _max_remain = 10;
+
+    /**
+     * An array contains all scores.
+     * @const
+     * @type {number[]}
+     * @private
+     */
+    static _scores = [];
+
+    /**
+     * Adds a score into the list.
+     * @param {number} score the score which should be added into the list.
+     */
+    static addScores(score) {
+      this._scores.push(score);
+      this._scores.sort((a, b) => a - b);
+      this.show();
+    }
+
+    /**
+     * Shows the score pad depending on current scores.
+     */
+    static show() {
+      const score_list = document.getElementById('scores');
+      score_list.innerHTML = '';
+      for (let i = 0; i < this._max_remain; i++) {
+        const list_item = document.createElement('li');
+        const score = this._scores[i];
+        if (isNaN(score)) {
+          list_item.innerHTML = '';
+        } else {
+          list_item.innerHTML = getTimeString(score);
+        }
+        score_list.appendChild(list_item);
+      }
+    }
+  }
+
+  /**
+   * An instance of this class refers a puzzle game board.
+   */
   class Board {
     /**
      * The number of squares at each row and column on the game board.
@@ -130,8 +183,10 @@
      */
     endGame() {
       clearInterval(aNumber);
-      setTimeout(() =>
-          window.alert(`complete! used ${getTimeString()}`), 0);
+      const time = Date.now() - aStartTime;
+      ScorePad.addScores(time);
+      setTimeout(() => window.alert(
+          `complete! used ${getTimeString(time)}`), 200);
       document.getElementById('timer').value = '0:00:00';
       document.getElementById('start-game').disabled = false;
       this._initializeSquares();
@@ -320,6 +375,7 @@
     const board = new Board();
     const button = document.getElementById('start-game');
     button.addEventListener('click', () => board.startGame());
+    ScorePad.show();
   });
 
   /**
@@ -327,16 +383,15 @@
    */
   function countTime() {
     const timer = document.getElementById('timer');
-    timer.value = getTimeString();
+    timer.value = getTimeString(Date.now() - aStartTime);
   }
 
   /**
    * Gets the string form of the time from game started to now.
    * @returns {string} the string form of the time.
    */
-  function getTimeString() {
-    const now = Date.now();
-    const time = Math.floor((now - aStartTime) / 1000);
+  function getTimeString(time) {
+    time = Math.floor(time / 1000);
     const second = time % 60;
     const minute = Math.floor(time / 60) % 60;
     const hour = Math.floor(time / 3600);

@@ -32,3 +32,7 @@ body {
 #main {
   width: 70%;
 }
+
+#scores {
+  font-family: monospace;
+}
