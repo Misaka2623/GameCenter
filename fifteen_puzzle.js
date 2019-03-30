@@ -105,14 +105,6 @@
     }
 
     /**
-     * Translates the specified coordinate to ordinate.
-     * @param {number} x the x coordinate.
-     * @param {number} y the y coordinate.
-     * @returns {number} the translated ordinate.
-     */
-    static coordinate2ordinate = (x, y) => x + y * this._size;
-
-    /**
      * Indicates whether the puzzle is solved.
      * @returns {boolean} true if the puzzle is solved.
      */
@@ -253,8 +245,8 @@
      * @private
      */
     _swap(index1, index2) {
-      const item1 = this._ordinates[index1];
-      const item2 = this._ordinates[index2];
+      const item1 = this._index2ordinate(index1);
+      const item2 = this._index2ordinate(index2);
       this._ordinates.splice(index2, 1, item1);
       this._ordinates.splice(index1, 1, item2);
     }
