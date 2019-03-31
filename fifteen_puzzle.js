@@ -2,28 +2,36 @@
   'use strict';
 
   /**
-   * The number for stopping the timer.
+   * @description the number for stopping the timer.
    * @type {number}
    */
   let aNumber;
 
   /**
-   * The beginning time of the game (in ms).
+   * @description the beginning time of the game (in ms).
    * @type {number}
    */
   let aStartTime;
 
+  /**
+   * @description the max stage number that the player can choose.
+   * @type {number}
+   */
   let aMaxStage;
 
+  /**
+   * @description the min stage number that the player can choose.
+   * @type {number}
+   */
   const kMinStage = 2;
 
   /**
-   * A storage for storing the scores.
+   * @description a storage for storing the scores.
    * @static
    */
   class ScorePad {
     /**
-     * The max items that can be shown on the page.
+     * @description the max items that can be shown on the page.
      * @const
      * @type {number}
      * @private
@@ -31,7 +39,7 @@
     static _max_remain = 10;
 
     /**
-     * An array contains all scores.
+     * @description an array contains all scores.
      * @const
      * @type {number[]}
      * @private
@@ -39,7 +47,7 @@
     static _scores = [];
 
     /**
-     * Adds a score into the list.
+     * @description adds a score into the list.
      * @param {number} score the score which should be added into the list.
      */
     static addScores(score) {
@@ -49,7 +57,7 @@
     }
 
     /**
-     * Shows the score pad depending on current scores.
+     * @description shows the score pad depending on current scores.
      */
     static show() {
       const score_list = document.getElementById('scores');
@@ -68,11 +76,11 @@
   }
 
   /**
-   * An instance of this class refers a puzzle game board.
+   * @description an instance of this class refers a puzzle game board.
    */
   class Board {
     /**
-     * The width and height of the game board (in px).
+     * @description the width and height of the game board (in px).
      * @const
      * @type {number}
      * @private
@@ -80,13 +88,14 @@
     static _board_size = 400;
 
     /**
-     * The number of squares at each row and column on the game board.
+     * @description the number of squares at each row and column on the game
+     * board.
      * @type {number}
      */
     static size = 2;
 
     /**
-     * Gets the width of the border of the square (in px).
+     * @description gets the width of the border of the square (in px).
      * @returns {number} the width of the border of the square (in px).
      * @private
      */
@@ -95,7 +104,7 @@
     }
 
     /**
-     * Gets the total number of squares on the puzzle board.
+     * @description gets the total number of squares on the puzzle board.
      * @returns {number} the total number of squares on the puzzle board.
      * @private
      */
@@ -104,8 +113,10 @@
     }
 
     /**
-     * Gets the size of the font in the square on the board (in pt).
-     * @returns {number} the size of the font in the square on the board (in pt).
+     * @description gets the size of the font in the square on the board (in
+     * pt).
+     * @returns {number} the size of the font in the square on the board (in
+     * pt).
      * @private
      */
     static get _square_font_size() {
@@ -113,8 +124,10 @@
     }
 
     /**
-     * Gets the width and height of the square (in px) including borders.
-     * @returns {number} the width and height of the square (in px) including borders.
+     * @description gets the width and height of the square (in px) including
+     * borders.
+     * @returns {number} the width and height of the square (in px) including
+     * borders.
      * @private
      */
     static get _square_size() {
@@ -122,7 +135,7 @@
     }
 
     /**
-     * Translates the specified ordinate to coordinate.
+     * @description translates the specified ordinate to coordinate.
      * @param {number} ordinate the ordinate which should be translated.
      * @returns {number[]} an array that contains two numbers. The first number
      * is x coordinate; the second number is y coordinate.
@@ -133,7 +146,7 @@
     }
 
     /**
-     * Stores all html elements of squares on the game board.
+     * @description stores all html elements of squares on the game board.
      * @const
      * @type {Map<number, HTMLDivElement>}
      * @private
@@ -141,8 +154,8 @@
     _data;
 
     /**
-     * An array contains the order of the ordinal of squares on the game
-     * board.
+     * @description an array contains the order of the ordinal of squares on the
+     * game board.
      * @const
      * @type {number[]}
      * @private
@@ -150,14 +163,14 @@
     _ordinates;
 
     /**
-     * Indicates whether this game is playing by the user.
+     * @description indicates whether this game is playing by the user.
      * @type {boolean}
      * @private
      */
     _started;
 
     /**
-     * Constructs a Board.
+     * @description constructs a Board.
      */
     constructor() {
       this._data = new Map();
@@ -173,7 +186,7 @@
     }
 
     /**
-     * Gets the ordinate of the square at specified position.
+     * @description gets the ordinate of the square at specified position.
      * @param {number} index position that the square at.
      * @returns {number} the ordinate of the square.
      * @private
@@ -183,7 +196,7 @@
     }
 
     /**
-     * Initializes all squares on the board.
+     * @description initializes all squares on the board.
      */
     _initializeSquares() {
       this._ordinates.splice(0, this._ordinates.length);
@@ -262,7 +275,7 @@
     }
 
     /**
-     * Indicates whether the specified square is available to move.
+     * @description indicates whether the specified square is available to move.
      * @param {number} ordinate the ordinate of the square.
      * @returns {boolean} true if the square is available to move.
      * @private
@@ -277,8 +290,8 @@
     }
 
     /**
-     * Translates the specified ordinate to the index that the square at.
-     *
+     * @description translates the specified ordinate to the index that the
+     * square at.
      * @param {number} ordinate the ordinate of the square.
      * @returns {number} the index that the square at.
      * @private
@@ -288,7 +301,7 @@
     }
 
     /**
-     * Shows the game board depending on current set of squares.
+     * @description shows the game board depending on current set of squares.
      * @private
      */
     _show() {
@@ -311,7 +324,7 @@
     }
 
     /**
-     * Shuffles the squares randomly.
+     * @description shuffles the squares randomly.
      * @private
      */
     _shuffle() {
@@ -330,7 +343,7 @@
     }
 
     /**
-     * Swaps the two squares at specified position.
+     * @description swaps the two squares at specified position.
      * @param {number} index1 the index of one square.
      * @param {number} index2 the index of another square.
      * @private
@@ -343,7 +356,7 @@
     }
 
     /**
-     * Ends the game.
+     * @description ends the game.
      */
     endGame() {
       clearInterval(aNumber);
@@ -358,7 +371,7 @@
     }
 
     /**
-     * Indicates whether the puzzle is solved.
+     * @description indicates whether the puzzle is solved.
      * @returns {boolean} true if the puzzle is solved.
      */
     isSolved() {
@@ -367,7 +380,7 @@
     }
 
     /**
-     * Resets the game.
+     * @description resets the game.
      */
     resetGame() {
       clearInterval(aNumber);
@@ -375,7 +388,7 @@
     }
 
     /**
-     * Starts the game.
+     * @description starts the game.
      */
     startGame() {
       this._initializeSquares();
@@ -391,7 +404,7 @@
   }
 
   /**
-   * Renews the timer on the page.
+   * @description renews the timer on the page.
    */
   function countTime() {
     const timer = document.getElementById('timer');
@@ -399,7 +412,7 @@
   }
 
   /**
-   * Gets the string form of the time from game started to now.
+   * @description gets the string form of the time from game started to now.
    * @returns {string} the string form of the time.
    */
   function getTimeString(time) {
