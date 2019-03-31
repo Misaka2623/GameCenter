@@ -5,8 +5,8 @@
 <title>Login</title>
 <body>
     <form>
-        <label for="username"><input id="username"></label><br>
-        <label for="password"><input id="password" type="password"></label><br>
+        <label for="username">username</label><input id="username"><br>
+        <label for="password">password</label><input id="password" type="password"><br>
         <input type="submit" name="login">
     </form>
 </body>
