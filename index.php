@@ -1,9 +1,12 @@
-<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <meta charset="UTF-8">
 <title>Login</title>
 <body>
+    <?php
+    session_start();
+    echo "haha";
+    ?>
     <form action="SessionController.php" method="POST" align="center">
         <label for="username">username:</label>
         <input id="username" type="text" name="username" required><br>
