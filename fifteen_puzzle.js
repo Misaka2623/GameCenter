@@ -26,8 +26,14 @@
   const kMinStage = 2;
 
   /**
+   * @description a map stores all stage map to the user high scores.
+   * @type {Map<number, ScorePad>}
+   * @see ScorePad
+   */
+  const kScores = new Map();
+
+  /**
    * @description a storage for storing the scores.
-   * @static
    */
   class ScorePad {
     /**
@@ -36,7 +42,7 @@
      * @type {number}
      * @private
      */
-    static _max_remain = 10;
+    _max_remain = 10;
 
     /**
      * @description an array contains all scores.
@@ -44,13 +50,13 @@
      * @type {number[]}
      * @private
      */
-    static _scores = [];
+    _scores = [];
 
     /**
      * @description adds a score into the list.
      * @param {number} score the score which should be added into the list.
      */
-    static addScores(score) {
+    addScores(score) {
       this._scores.push(score);
       this._scores.sort((a, b) => a - b);
       this.show();
@@ -59,7 +65,7 @@
     /**
      * @description shows the score pad depending on current scores.
      */
-    static show() {
+    show() {
       const score_list = document.getElementById('scores');
       score_list.innerHTML = '';
       for (let i = 0; i < this._max_remain; i++) {
@@ -199,6 +205,7 @@
      * @description initializes all squares on the board.
      */
     _initializeSquares() {
+      Board.size = parseInt(document.getElementById('select-stage').value);
       this._ordinates.splice(0, this._ordinates.length);
       this._data.clear();
       for (let ordinate = 1; ordinate <= Board._length; ordinate++) {
@@ -321,6 +328,10 @@
       colors += index % Board.size === 0 ? 'white' : 'black';
 
       this._data.get(Board._length).style.borderColor = colors;
+      if (!kScores.has(Board.size)) {
+        kScores.set(Board.size, new ScorePad());
+      }
+      kScores.get(Board.size).show();
     }
 
     /**
@@ -361,7 +372,10 @@
     endGame() {
       clearInterval(aNumber);
       const time = Date.now() - aStartTime;
-      ScorePad.addScores(time);
+      if (!kScores.has(Board.size)) {
+        kScores.set(Board.size, new ScorePad());
+      }
+      kScores.get(Board.size).addScores(time);
       setTimeout(() => window.alert(
           `complete! used ${getTimeString(time)}`), 200);
       document.getElementById('timer').value = '0:00:00';
@@ -428,8 +442,8 @@
   window.addEventListener('load', () => {
     aMaxStage = 10;
     const select = document.getElementById('select-stage');
-    select.addEventListener('change',
-        () => Board.size = parseInt(select.value));
+    // select.addEventListener('change',
+    //     () => Board.size = parseInt(select.value));
     for (let i = kMinStage + 1; i <= aMaxStage; i++) {
       const option = document.createElement('option');
       option.value = i.toString();
@@ -443,6 +457,6 @@
     document.getElementById('reset-game').
         addEventListener('click', () => board.resetGame());
 
-    ScorePad.show();
+    kScores.get(Board.size).show();
   });
 })();
