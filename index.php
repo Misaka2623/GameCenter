@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Login</title>
 <body>
-    <form action="SeasonController.php" method="POST" align="center">
+    <form action="SessionController.php" method="POST" align="center">
         <label for="username">username:</label>
         <input id="username" type="text" name="username"><br>
 

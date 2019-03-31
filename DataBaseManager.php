@@ -19,6 +19,7 @@ class DataBaseManager{
         
     }
     public function login($username, $password){
+	echo "got in the login function";
         $sql_query = "SELECT hashed_password FROM user_info WHERE username = '$username'");
         $result = $connection->query($connection, $sql_query);
         if($result->num_rows > 0){
