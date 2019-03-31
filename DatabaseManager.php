@@ -20,7 +20,6 @@ class DatabaseManager{
         } 
     }
     public function login($username, $password){
-	echo "got in the login function";
         $sql_query = "SELECT hashed_password FROM user_info WHERE username = '$username'";
         $result = $this->connection->query($sql_query);
         if($result->num_rows > 0){
@@ -28,6 +27,7 @@ class DatabaseManager{
             $row = $result->fetch_assoc();
             if(password_verify($password, $row[0])){
                 $sql_query = "UPDATE user_info SET last_login = CURRENT_TIMESTAMP(), login_count = login_count + 1";
+                $this->connection->query($sql_query);
                 return true;
             }
             return false;
@@ -35,6 +35,7 @@ class DatabaseManager{
         // create new account if not exist already
         $hashed_password = password_hash($password, PASSWORD_BCRYPT);
         $sql_query = "INSERT INTO user_info (username, hashed_password, signup_date, last_login) VALUES ('$username', '$hashed_password', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP())";
+        $this->connection->query($sql_query);
         return true;
     }
 }
