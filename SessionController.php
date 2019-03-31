@@ -15,7 +15,7 @@ if(isset($_POST['username']) && isset($_POST["password"])){
         header('Location: fifteen_puzzle.html');
     }else{
         // show error
-	echo "wrong password";
+	    echo "wrong password";
     }
 }
 
