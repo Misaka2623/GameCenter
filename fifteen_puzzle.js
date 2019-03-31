@@ -354,6 +354,7 @@
           `complete! used ${getTimeString(time)}`), 200);
       document.getElementById('timer').value = '0:00:00';
       document.getElementById('start-game').disabled = false;
+      document.getElementById('reset-game').disabled = true;
       this._initializeSquares();
       this._show();
       this._started = false;
@@ -369,6 +370,15 @@
     }
 
     /**
+     * Resets the game.
+     */
+    resetGame() {
+      clearInterval(aNumber);
+      this._initializeSquares();
+      this.startGame();
+    }
+
+    /**
      * Starts the game.
      */
     startGame() {
@@ -378,12 +388,9 @@
       }
       aNumber = setInterval(countTime, 1000);
       document.getElementById('start-game').disabled = true;
+      document.getElementById('reset-game').disabled = false;
       this._started = true;
     }
-
-    // resetGame() {
-    //
-    // }
   }
 
   /**
@@ -410,8 +417,11 @@
 
   window.addEventListener('load', () => {
     const board = new Board();
-    const button = document.getElementById('start-game');
-    button.addEventListener('click', () => board.startGame());
+    document.getElementById('start-game').
+        addEventListener('click', () => board.startGame());
+    document.getElementById('reset-game').
+        addEventListener('click', () => board.resetGame());
+
     ScorePad.show();
   });
 })();
