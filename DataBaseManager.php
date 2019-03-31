@@ -3,7 +3,7 @@
 Descrption: This class connect to the rds datebase and contains behaviors related to mysql.
 Author: Hanwei Li
 */
-class DataBaseManager{
+class DatabaseManager{
     private $connection;
     public function __construct(){
         $host = 'csc346-project2.c3jmudlmcgqc.us-east-1.rds.amazonaws.com';

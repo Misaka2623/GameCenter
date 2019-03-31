@@ -1,5 +1,5 @@
 <?php
-include "DataBaseManager.php";
+include 'DatabaseManager.php';
 echo "test if this fie loaded";
 /*
 $db_manager = new DataBaseManager();
