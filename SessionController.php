@@ -1,9 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 include 'DatabaseManager.php';
-echo "test if this fie loaded";
-/*
-$db_manager = new DataBaseManager();
-
+echo "ha";
 session_start();
 
 
@@ -19,6 +18,6 @@ if(isset($_POST['username']) && isset($_POST["password"])){
 	echo "wrong password";
     }
 }
-*/
+
 
 ?>

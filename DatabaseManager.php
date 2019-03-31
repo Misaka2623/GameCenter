@@ -1,4 +1,7 @@
 <?php
+ini_set('display_error', 1);
+error_reporting(E_ALL);
+
 /*
 Descrption: This class connect to the rds datebase and contains behaviors related to mysql.
 Author: Hanwei Li
@@ -10,18 +13,16 @@ class DatabaseManager{
         $username = 'lihanwei4c';
         $password = 'gamecenterdbpassword';
         $database = 'GameInfo';
-        $connection = new mysqli($host, $username, $password, $database);
+        $this->connection = new mysqli($host, $username, $password, $database);
 
-        if(!$connection->connection_error){
-            die('Failed connecting to the DataBase');
-        }
-
-        
+        if(!$this->connection){
+            die('Connection Failure: ' . $connection->connect_error);
+        } 
     }
     public function login($username, $password){
 	echo "got in the login function";
-        $sql_query = "SELECT hashed_password FROM user_info WHERE username = '$username'");
-        $result = $connection->query($connection, $sql_query);
+        $sql_query = "SELECT hashed_password FROM user_info WHERE username = '$username'";
+        $result = $this->connection->query($sql_query);
         if($result->num_rows > 0){
             // compare password
             $row = $result->fetch_assoc();
@@ -37,4 +38,5 @@ class DatabaseManager{
         return true;
     }
 }
+$db_manager = new DatabaseManager();
 ?>
