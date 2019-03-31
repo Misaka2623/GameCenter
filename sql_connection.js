@@ -1,5 +1,5 @@
-var mysql	= require('mysql');
-var connection	= mysql.createConnection({
+let mysql	= require('mysql');
+let connection	= mysql.createConnection({
 	host	:	'csc346-project2.c3jmudlmcgqc.us-east-1.rds.amazonaws.com',
 	user	:	'lihanwei4c',
 	password:	'gamecenterdbpassword',
@@ -13,8 +13,8 @@ connection.connect(function(err) {
 });
 
 function login(){
-	let username = document.getElementById("username").nodeValue;
-	let password = document.getElementById("password").nodeValue;
+	let username = document.getElementById("username").value;
+	let password = document.getElementById("password").value;
 	console.log("username: " + username);
 	console.log("password:" + password);
 	let getRowQuery = "SELECT hashed_password FROM user_info WHERE username = " + mysql.escape(username);
