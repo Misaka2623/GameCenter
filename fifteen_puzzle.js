@@ -13,6 +13,10 @@
    */
   let aStartTime;
 
+  let aMaxStage;
+
+  const kMinStage = 2;
+
   /**
    * A storage for storing the scores.
    * @static
@@ -77,43 +81,45 @@
 
     /**
      * The number of squares at each row and column on the game board.
-     * @const
      * @type {number}
-     * @private
      */
-    static _size = 2;
+    static size = 2;
 
     /**
-     * The total number of squares on the puzzle board.
-     * @const
-     * @type {number}
+     * Gets the width of the border of the square (in px).
+     * @returns {number} the width of the border of the square (in px).
      * @private
      */
-    static _length = Math.pow(Board._size, 2);
+    static get _border_width() {
+      return this._square_size * .05;
+    }
 
     /**
-     * The width and height of the square (in px) including borders.
-     * @const
-     * @type {number}
+     * Gets the total number of squares on the puzzle board.
+     * @returns {number} the total number of squares on the puzzle board.
      * @private
      */
-    static _square_size = Board._board_size / Board._size;
+    static get _length() {
+      return Math.pow(this.size, 2);
+    }
 
     /**
-     * The width of the border of the square (in px).
-     * @const
-     * @type {number}
+     * Gets the size of the font in the square on the board (in pt).
+     * @returns {number} the size of the font in the square on the board (in pt).
      * @private
      */
-    static _border_width = Board._square_size * 0.05;
+    static get _square_font_size() {
+      return this._square_size * .4;
+    }
 
     /**
-     * The size of the font in the square on the board (in pt).
-     * @const
-     * @type {number}
+     * Gets the width and height of the square (in px) including borders.
+     * @returns {number} the width and height of the square (in px) including borders.
      * @private
      */
-    static _square_font_size = Board._square_size * 0.4;
+    static get _square_size() {
+      return this._board_size / this.size;
+    }
 
     /**
      * Translates the specified ordinate to coordinate.
@@ -123,7 +129,7 @@
      */
     static ordinate2coordinate(ordinate) {
       const index = ordinate - 1;
-      return [index % Board._size, Math.floor(index / Board._size)];
+      return [index % Board.size, Math.floor(index / Board.size)];
     }
 
     /**
@@ -181,6 +187,7 @@
      */
     _initializeSquares() {
       this._ordinates.splice(0, this._ordinates.length);
+      this._data.clear();
       for (let ordinate = 1; ordinate <= Board._length; ordinate++) {
         this._ordinates.push(ordinate);
       }
@@ -234,7 +241,7 @@
                 empty_square.style.borderRightColor = 'red';
               } else if (empty_index === square_index + 1) {
                 empty_square.style.borderLeftColor = 'red';
-              } else if (empty_index === square_index - Board._size) {
+              } else if (empty_index === square_index - Board.size) {
                 empty_square.style.borderBottomColor = 'red';
               } else {
                 empty_square.style.borderTopColor = 'red';
@@ -263,10 +270,10 @@
     _isAvailableToMove(ordinate) {
       const index = this._ordinate2index(ordinate);
       const empty = this._ordinate2index(Board._length);
-      return index >= 0 && index + Board._size === empty
-          || index % Board._size !== 0 && index - 1 === empty
-          || index < Board._length && index - Board._size === empty
-          || index % Board._size !== Board._size - 1 && index + 1 === empty;
+      return index >= 0 && index + Board.size === empty
+          || index % Board.size !== 0 && index - 1 === empty
+          || index < Board._length && index - Board.size === empty
+          || index % Board.size !== Board.size - 1 && index + 1 === empty;
     }
 
     /**
@@ -288,16 +295,17 @@
       const container = document.getElementById('board');
       container.innerHTML = '';
       for (const ordinate of this._ordinates) {
-        container.appendChild(this._data.get(ordinate));
+        const square = this._data.get(ordinate);
+        container.appendChild(square);
       }
 
       const index = this._ordinate2index(Board._length);
 
       let colors = '';
-      colors += index / Board._size < 1 ? 'white ' : 'black ';
-      colors += index % Board._size === Board._size - 1 ? 'white ' : 'black ';
-      colors += index / Board._size >= Board._size - 1 ? 'white ' : 'black ';
-      colors += index % Board._size === 0 ? 'white' : 'black';
+      colors += index / Board.size < 1 ? 'white ' : 'black ';
+      colors += index % Board.size === Board.size - 1 ? 'white ' : 'black ';
+      colors += index / Board.size >= Board.size - 1 ? 'white ' : 'black ';
+      colors += index % Board.size === 0 ? 'white' : 'black';
 
       this._data.get(Board._length).style.borderColor = colors;
     }
@@ -308,24 +316,15 @@
      */
     _shuffle() {
       for (let i = 0; i < 1000; i++) {
-        const index = this._ordinate2index(Board._length);
-        const directions = [];
-        if (Math.floor(index / Board._size) !== 0) {
-          directions.push(index - Board._size);
+        const available = [];
+        for (const ordinate of this._ordinates) {
+          if (this._isAvailableToMove(ordinate)) {
+            available.push(ordinate);
+          }
         }
-        if (Math.floor(index / Board._size) !== Board._size - 1) {
-          directions.push(index + Board._size);
-        }
-        if (index % Board._size !== 0) {
-          directions.push(index - 1);
-        }
-        if (index % Board._size !== Board._size - 1) {
-          directions.push(index + 1);
-        }
-
-        const random = Math.floor(Math.random() * directions.length);
-        const target = directions[random];
-        this._swap(target, index);
+        const random = Math.floor(Math.random() * available.length);
+        this._swap(this._ordinate2index(available[random]),
+            this._ordinate2index(Board._length));
       }
       this._show();
     }
@@ -355,8 +354,6 @@
       document.getElementById('timer').value = '0:00:00';
       document.getElementById('start-game').disabled = false;
       document.getElementById('reset-game').disabled = true;
-      this._initializeSquares();
-      this._show();
       this._started = false;
     }
 
@@ -374,7 +371,6 @@
      */
     resetGame() {
       clearInterval(aNumber);
-      this._initializeSquares();
       this.startGame();
     }
 
@@ -382,6 +378,7 @@
      * Starts the game.
      */
     startGame() {
+      this._initializeSquares();
       aStartTime = Date.now();
       while (this.isSolved()) {
         this._shuffle();
@@ -416,6 +413,17 @@
   }
 
   window.addEventListener('load', () => {
+    aMaxStage = 10;
+    const select = document.getElementById('select-stage');
+    select.addEventListener('change',
+        () => Board.size = parseInt(select.value));
+    for (let i = kMinStage + 1; i <= aMaxStage; i++) {
+      const option = document.createElement('option');
+      option.value = i.toString();
+      option.innerHTML = i.toString();
+      select.appendChild(option);
+    }
+
     const board = new Board();
     document.getElementById('start-game').
         addEventListener('click', () => board.startGame());
