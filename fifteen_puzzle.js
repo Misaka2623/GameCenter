@@ -144,11 +144,19 @@
     _ordinates;
 
     /**
+     * Indicates whether this game is playing by the user.
+     * @type {boolean}
+     * @private
+     */
+    _started;
+
+    /**
      * Constructs a Board.
      */
     constructor() {
       this._data = new Map();
       this._ordinates = [];
+      this._started = false;
 
       const container = document.getElementById('board');
       container.style.height = `${Board._board_size}px`;
@@ -205,7 +213,7 @@
               ` ${-1 * y * Board._square_size}px`;
 
           square.addEventListener('click', () => {
-            if (this._isAvailableToMove(ordinate)) {
+            if (this._started && this._isAvailableToMove(ordinate)) {
               this._swap(this._ordinate2index(ordinate),
                   this._ordinate2index(Board._length));
               this._show();
@@ -215,7 +223,7 @@
             }
           });
           square.addEventListener('mouseenter', () => {
-            if (this._isAvailableToMove(ordinate)) {
+            if (this._started && this._isAvailableToMove(ordinate)) {
               square.style.cursor = 'pointer';
               square.style.borderColor = 'red';
 
@@ -348,6 +356,7 @@
       document.getElementById('start-game').disabled = false;
       this._initializeSquares();
       this._show();
+      this._started = false;
     }
 
     /**
@@ -369,7 +378,12 @@
       }
       aNumber = setInterval(countTime, 1000);
       document.getElementById('start-game').disabled = true;
+      this._started = true;
     }
+
+    // resetGame() {
+    //
+    // }
   }
 
   /**
