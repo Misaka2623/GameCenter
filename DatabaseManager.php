@@ -25,7 +25,7 @@ class DatabaseManager{
         if($result->num_rows > 0){
             // compare password
             $row = $result->fetch_assoc();
-            if(password_verify($password, $row[0])){
+            if(password_verify($password, $row[0]['hashed_password'])){
                 $sql_query = "UPDATE user_info SET last_login = CURRENT_TIMESTAMP(), login_count = login_count + 1";
                 $this->connection->query($sql_query);
                 return true;
