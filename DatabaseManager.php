@@ -46,8 +46,45 @@ class DatabaseManager{
     }
 
     public function newScore($username, $level, $time_cost){
-        $sql_query = "UPDATE user_info SET games_won = games_won + 1";
+        // add game record
+        $sql_query = "INSERT INTO game_records (player, game_level, play_date, time_cost) VALUES ('$username', '$level', NOW(), $time_cost)";
         $result = $this->connection->query($sql_query);
+
+        // get the highest level beaten
+        $sql_query = "SELECT MAX(game_level) AS game_level FROM game_records WHERE player = '$username'";
+        $result = $this->conneciton->query($sql_query);
+        $row = $result->fetch_assoc();
+        $highest = $row['game_level'];
+
+        // update games_won and the highest_level_beaten
+        $sql_query = "UPDATE user_info SET games_won = games_won + 1, highest_level_beaten = $highest WHERE username = '$username'";
+        $result = $this->connection->query($sql_query);
+    }
+
+    public function getUserInfo($username){
+        $sql_query = "SELECT * FROM user_info WHERE username = '$username'";
+        $result = $this->connection->query($sql_query);
+        if($result->num_rows > 0){
+            return $result->fetch_assoc();   
+        }
+    }
+    
+    public function getLevelScoreboard($level){
+        $sql_query = "SELECT player, time_cost FROM game_records WHERE game_level = $level ORDER BY time_cost";
+        $result = $this->connection->query($sql_query);
+        while($row = $result->fetch_assoc()){
+            $rows[] = $row;
+        }
+        return $rows;
+    }
+
+    public function getLeaderBoard(){
+        $sql_query = "SELECT username, games_played, games_won, highest_level_beaten FROM user_info ORDER BY highest_level_beaten";
+        $result = $this->connection->query($sql_query);
+        while($row = $result->fetch_assoc()){
+            $rows[] = $row;
+        }
+        return $rows;
     }
 }
 $db_manager = new DatabaseManager();
