@@ -5,6 +5,7 @@
 <body>
     <?php
     session_start();
+    unset($_SESSION['user']);
     ?>
     <form action="SessionController.php" method="POST" align="center">
         <label for="username">username:</label>
