@@ -3,10 +3,11 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 include 'DatabaseManager.php';
 session_start();
-
+echo '1';
 // when logged in
 if(isset($_SESSION['user'])){
-
+    echo '2';
+    echo $_SESSION['user'];
     // attempt to logout
     if(isset($_POST['logout'])){
         session_destroy();
@@ -34,6 +35,7 @@ if(isset($_SESSION['user'])){
 }
 // attempt to login
 else if(isset($_POST['username']) && isset($_POST["password"])){
+    echo '3';
     $username = htmlspecialchars($_POST['username']);
     $password = htmlspecialchars($_POST['password']);
     $result = $db_manager->login($username, $password);
@@ -44,6 +46,7 @@ else if(isset($_POST['username']) && isset($_POST["password"])){
         // show error
 	    echo "wrong password";
     }
+    echo '4';
 }
 
 ?>
