@@ -6,8 +6,8 @@ session_start();
 echo '1';
 // when logged in
 if(isset($_SESSION['user'])){
-    echo '2';
-    echo $_SESSION['user'];
+    echo '2' . '\n';
+    echo 'Session: ' . $_SESSION['user'] . '\n';
     // attempt to logout
     if(isset($_POST['logout'])){
         session_destroy();
