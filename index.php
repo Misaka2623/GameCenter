@@ -5,7 +5,6 @@
 <body>
     <?php
     session_start();
-    echo "haha";
     ?>
     <form action="SessionController.php" method="POST" align="center">
         <label for="username">username:</label>
