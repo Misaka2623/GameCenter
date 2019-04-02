@@ -5,7 +5,9 @@
 <body>
     <?php
     session_start();
-    unset($_SESSION['user']);
+    if(isset($_SESSION['user'])){
+        header('Location: fifteen_puzzle.html');
+    }
     ?>
     <form action="SessionController.php" method="POST" align="center">
         <label for="username">username:</label>
