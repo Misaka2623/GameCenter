@@ -23,7 +23,7 @@
    * @description the min stage number that the player can choose.
    * @type {number}
    */
-  const kMinStage = 2;
+  const kMinStage = 1;
 
   /**
    * @description a map stores all stage map to the user high scores.
@@ -31,6 +31,16 @@
    * @see ScorePad
    */
   const kScores = new Map();
+
+  class User {
+    _username;
+
+    _password;
+
+    _scores;
+
+    _lastLogin;
+  }
 
   /**
    * @description a storage for storing the scores.
@@ -217,7 +227,6 @@
      */
     _initializeSquares() {
       Board.size = parseInt(document.getElementById('select-stage').value + 1);
-
       this._ordinates.splice(0, this._ordinates.length);
       this._data.clear();
       for (let ordinate = 1; ordinate <= Board._length; ordinate++) {
@@ -394,6 +403,7 @@
       document.getElementById('start-game').disabled = false;
       document.getElementById('reset-game').disabled = true;
       this._started = false;
+      aMaxStage++;
     }
 
     /**
@@ -454,17 +464,24 @@
         `:${second < 10 ? 0 : ''}${second}`;
   }
 
-  window.addEventListener('load', () => {
-    aMaxStage = 10;
+  /**
+   * @description refreshes the select stage label to match the change of the
+   * max stage.
+   */
+  function refreshSelectableStage() {
     const select = document.getElementById('select-stage');
-    //select.addEventListener('change',
-    //     () => Board.size = parseInt(select.value));
+    select.innerHTML = '';
     for (let i = kMinStage + 1; i <= aMaxStage; i++) {
       const option = document.createElement('option');
       option.value = i.toString();
       option.innerHTML = i.toString();
       select.appendChild(option);
     }
+  }
+
+  window.addEventListener('load', () => {
+    aMaxStage = 1;
+    refreshSelectableStage();
 
     const board = new Board();
     document.getElementById('start-game').
