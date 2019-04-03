@@ -2,8 +2,8 @@
 <html lang="en">
 <?php
 session_start();
-if (isset($_SESSION['user'])) {
-    header('Location: fifteen_puzzle.php');
+if (!isset($_SESSION['user'])) {
+    header('Location: index.php');
 }
 ?>
 
