@@ -1,3 +1,7 @@
+body {
+    margin: auto;
+}
+
 #username,
 #password {
     margin: 5px;
