@@ -70,8 +70,8 @@
       this._scores.push(score);
       this._scores.sort((a, b) => a - b);
       let request = new XMLHttpRequest();
-      request.open("POST", "SessionController.php", true);
-      request.send("gamerecord=" + document.getElementById);
+      request.open('POST', 'SessionController.php', true);
+      request.send('gamerecord=' + document.getElementById);
       this.show();
     }
 
@@ -221,9 +221,8 @@
       Board.size = parseInt(document.getElementById('select-stage').value + 1);
 
       let request = new XMLHttpRequest();
-      request.open("POST", "SessionController.php", true);
-      request.send("cur_level=" + Board.size - 1);
-      
+      request.open('POST', 'SessionController.php', true);
+      request.send('cur_level=' + Board.size - 1);
 
       this._ordinates.splice(0, this._ordinates.length);
       this._data.clear();
@@ -459,6 +458,10 @@
         `:${second < 10 ? 0 : ''}${second}`;
   }
 
+  /**
+   * @description refreshes the select stage label to match the change of the
+   * max stage.
+   */
   function refreshSelectableStage() {
     const select = document.getElementById('select-stage');
     select.innerHTML = '';
