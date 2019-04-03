@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+<?php
+session_start();
+if (isset($_SESSION['user'])) {
+    header('Location: fifteen_puzzle.php');
+}
+?>
 
 <meta charset="UTF-8">
 <title>Fifteen Puzzle</title>
