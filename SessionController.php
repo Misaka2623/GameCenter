@@ -11,16 +11,9 @@ if(isset($_SESSION['user'])){
         header('Location: index.php');
     }
 
-    // get level scoreboard
-    if(isset($_POST['level_scores'])){
-        $scores = $db_manager->getLevelScoreBoard();
-        echo json_encode($scores);
-    }
-
-
     // add new game record
-    if(isset($_POST['new_record']) && isset($_GET['cur_level'])){
-        $db_manager->newRecord($_SESSION['user'], $_GET['cur_level']);
+    if(isset($_POST['new_record'])){
+        $db_manager->newRecord($_SESSION['user'], $_GET['new_record']);
         unset($_POST['new_record']);
     }
 
@@ -28,6 +21,14 @@ if(isset($_SESSION['user'])){
     if(isset($_POST['new_score']) && isset($_POST['cur_level'])){
         $db_manager->newScore($_SESSION['user'], $_GET['cur_level'], $_POST['new_score']);
         unset($_POST['new_score']);
+        $updated_score = $db_manager->getLevelScoreBoard($_POST['level_scores']);
+        echo json_encode($updated_score);
+    }
+
+    // get level scoreboard
+    if(isset($_POST['level_scores'])){
+        $scores = $db_manager->getLevelScoreBoard($_POST['level_scores']);
+        echo json_encode($scores);
     }
 }
 // attempt to login
