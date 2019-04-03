@@ -32,6 +32,16 @@
    */
   const kScores = new Map();
 
+  class User {
+    _username;
+
+    _password;
+
+    _scores;
+
+    _lastLogin;
+  }
+
   /**
    * @description a storage for storing the scores.
    */
@@ -439,17 +449,19 @@
         `:${second < 10 ? 0 : ''}${second}`;
   }
 
-  window.addEventListener('load', () => {
-    aMaxStage = 10;
+  function refreshSelectableStage() {
     const select = document.getElementById('select-stage');
-    // select.addEventListener('change',
-    //     () => Board.size = parseInt(select.value));
     for (let i = kMinStage + 1; i <= aMaxStage; i++) {
       const option = document.createElement('option');
       option.value = i.toString();
       option.innerHTML = i.toString();
       select.appendChild(option);
     }
+  }
+
+  window.addEventListener('load', () => {
+    aMaxStage = 10;
+    refreshSelectableStage();
 
     const board = new Board();
     document.getElementById('start-game').
