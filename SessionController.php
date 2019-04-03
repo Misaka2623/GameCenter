@@ -13,7 +13,7 @@ if(isset($_SESSION['user'])){
 
     // get level scoreboard
     if(isset($_POST['level_scores'])){
-        $scores = $db_manager->getScores();
+        $scores = $db_manager->getLevelScoreBoard();
         echo json_encode($scores);
     }
 
@@ -42,7 +42,6 @@ else if(isset($_POST['username']) && isset($_POST["password"])){
         // show error
 	    echo "wrong password";
     }
-    echo '4';
 }
 
 ?>
