@@ -23,7 +23,7 @@
    * @description the min stage number that the player can choose.
    * @type {number}
    */
-  const kMinStage = 1;
+  const kMinStage = 2;
 
   /**
    * @description a map stores all stage map to the user high scores.
@@ -71,15 +71,15 @@
       this._scores.sort((a, b) => a - b);
       let request = new XMLHttpRequest();
       request.open("POST", "SessionController.php", true);
-      request.send("new_score=" + score + "&cur_level=" + (Board.size - 1));
+      request.send("new_score=" + score + "&cur_level=" + Board.size);
       request.onreadystatechange = function() {
-        if (request.readyState == 4 && request.status == 200) {
+        if (request.readyState === 4 && request.status === 200) {
           let array = JSON.parse(request.responseText);
           for(let row of array){
             row.push();
           }
         }
-      }
+      };
       this.show();
     }
 
@@ -226,7 +226,7 @@
      * @description initializes all squares on the board.
      */
     _initializeSquares() {
-      Board.size = parseInt(document.getElementById('select-stage').value + 1);
+      Board.size = parseInt(document.getElementById('select-stage').value);
       this._ordinates.splice(0, this._ordinates.length);
       this._data.clear();
       for (let ordinate = 1; ordinate <= Board._length; ordinate++) {
@@ -480,7 +480,7 @@
   }
 
   window.addEventListener('load', () => {
-    aMaxStage = 1;
+    aMaxStage = 10;
     refreshSelectableStage();
 
     const board = new Board();
