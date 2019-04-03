@@ -69,6 +69,9 @@
     addScores(score) {
       this._scores.push(score);
       this._scores.sort((a, b) => a - b);
+      let request = new XMLHttpRequest();
+      request.open("POST", "SessionController.php", true);
+      request.send("gamerecord=" + document.getElementById);
       this.show();
     }
 
@@ -215,7 +218,13 @@
      * @description initializes all squares on the board.
      */
     _initializeSquares() {
-      Board.size = parseInt(document.getElementById('select-stage').value);
+      Board.size = parseInt(document.getElementById('select-stage').value + 1);
+
+      let request = new XMLHttpRequest();
+      request.open("POST", "SessionController.php", true);
+      request.send("cur_level=" + Board.size - 1);
+      
+
       this._ordinates.splice(0, this._ordinates.length);
       this._data.clear();
       for (let ordinate = 1; ordinate <= Board._length; ordinate++) {
@@ -451,6 +460,11 @@
 
   function refreshSelectableStage() {
     const select = document.getElementById('select-stage');
+<<<<<<< HEAD
+=======
+    //select.addEventListener('change',
+    //     () => Board.size = parseInt(select.value));
+>>>>>>> origin/master
     for (let i = kMinStage + 1; i <= aMaxStage; i++) {
       const option = document.createElement('option');
       option.value = i.toString();
