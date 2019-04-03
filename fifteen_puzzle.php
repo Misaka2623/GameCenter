@@ -23,7 +23,7 @@ if (!isset($_SESSION['user'])) {
     <button disabled id="reset-game">reset game</button>
     <label for="select-stage">&nbsp;&nbsp; select stage:</label>
     <select id="select-stage">
-      <option selected value="2">2</option>
+      <option selected value="1">1</option>
     </select>
   </div>
 </div>

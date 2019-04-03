@@ -23,7 +23,7 @@
    * @description the min stage number that the player can choose.
    * @type {number}
    */
-  const kMinStage = 2;
+  const kMinStage = 1;
 
   /**
    * @description a map stores all stage map to the user high scores.
@@ -401,6 +401,7 @@
       document.getElementById('start-game').disabled = false;
       document.getElementById('reset-game').disabled = true;
       this._started = false;
+      aMaxStage++;
     }
 
     /**
@@ -460,11 +461,7 @@
 
   function refreshSelectableStage() {
     const select = document.getElementById('select-stage');
-<<<<<<< HEAD
-=======
-    //select.addEventListener('change',
-    //     () => Board.size = parseInt(select.value));
->>>>>>> origin/master
+    select.innerHTML = '';
     for (let i = kMinStage + 1; i <= aMaxStage; i++) {
       const option = document.createElement('option');
       option.value = i.toString();
@@ -474,7 +471,7 @@
   }
 
   window.addEventListener('load', () => {
-    aMaxStage = 10;
+    aMaxStage = 1;
     refreshSelectableStage();
 
     const board = new Board();
