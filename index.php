@@ -8,7 +8,7 @@
 <?php
 session_start();
 if (isset($_SESSION['user'])) {
-    header('Location: fifteen_puzzle.html');
+    header('Location: fifteen_puzzle.php');
 }
 ?>
 <form action="SessionController.php" method="POST" align="center">

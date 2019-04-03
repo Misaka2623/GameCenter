@@ -37,7 +37,7 @@ else if(isset($_POST['username']) && isset($_POST["password"])){
     $result = $db_manager->login($username, $password);
     if($result){
         $_SESSION['user'] = $_POST['username'];
-        header('Location: fifteen_puzzle.html');
+        header('Location: fifteen_puzzle.php');
     }else{
         // show error
 	    echo "wrong password";
