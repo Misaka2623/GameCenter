@@ -231,11 +231,11 @@
         square.innerHTML = ordinate.toString();
 
         if (ordinate === Board._length) {
-          square.style.borderColor = '#000 #fff #fff #000';
+          square.style.borderColor = '#000000 #d3d3d3 #d3d3d3 #000000';
           square.style.background = 'none';
-          square.style.color = '#fff';
+          square.style.color = '#d3d3d3';
         } else {
-          square.style.borderColor = '#000';
+          square.style.borderColor = '#000000';
           square.style.backgroundPosition = `${-1 * x * Board._square_size}px` +
               ` ${-1 * y * Board._square_size}px`;
 
@@ -252,28 +252,28 @@
           square.addEventListener('mouseenter', () => {
             if (this._started && this._isAvailableToMove(ordinate)) {
               square.style.cursor = 'pointer';
-              square.style.borderColor = 'red';
+              square.style.borderColor = '#ff0000';
 
               const empty_square = this._data.get(Board._length);
               const empty_index = this._ordinate2index(Board._length);
               const square_index = this._ordinate2index(ordinate);
               if (empty_index === square_index - 1) {
-                empty_square.style.borderRightColor = 'red';
+                empty_square.style.borderRightColor = '#ff0000';
               } else if (empty_index === square_index + 1) {
-                empty_square.style.borderLeftColor = 'red';
+                empty_square.style.borderLeftColor = '#ff0000';
               } else if (empty_index === square_index - Board.size) {
-                empty_square.style.borderBottomColor = 'red';
+                empty_square.style.borderBottomColor = '#ff0000';
               } else {
-                empty_square.style.borderTopColor = 'red';
+                empty_square.style.borderTopColor = '#ff0000';
               }
             }
           });
           square.addEventListener('mouseleave', () => {
             square.style.cursor = 'default';
-            square.style.borderColor = 'black';
+            square.style.borderColor = '#000000';
             const empty_style = this._data.get(Board._length).style;
             empty_style.borderColor =
-                empty_style.borderColor.replace('red', 'black');
+                empty_style.borderColor.replace('#ff0000', '#000000');
           });
         }
 
@@ -322,10 +322,10 @@
       const index = this._ordinate2index(Board._length);
 
       let colors = '';
-      colors += index / Board.size < 1 ? 'white ' : 'black ';
-      colors += index % Board.size === Board.size - 1 ? 'white ' : 'black ';
-      colors += index / Board.size >= Board.size - 1 ? 'white ' : 'black ';
-      colors += index % Board.size === 0 ? 'white' : 'black';
+      colors += index / Board.size < 1 ? '#d3d3d3 ' : '#000000 ';
+      colors += index % Board.size === Board.size - 1 ? '#d3d3d3 ' : '#000000 ';
+      colors += index / Board.size >= Board.size - 1 ? '#d3d3d3 ' : '#000000 ';
+      colors += index % Board.size === 0 ? '#d3d3d3' : '#000000';
 
       this._data.get(Board._length).style.borderColor = colors;
       if (!kScores.has(Board.size)) {
