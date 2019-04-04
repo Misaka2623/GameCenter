@@ -14,12 +14,6 @@
   let aStartTime;
 
   /**
-   * @description the max stage number that the player can choose.
-   * @type {number}
-   */
-  let aMaxStage = 2;
-
-  /**
    * @description the min stage number that the player can choose.
    * @type {number}
    */
@@ -374,9 +368,6 @@
       setTimeout(() => window.alert(
           `complete! used ${getTimeString(time)}`), 100);
       addScores(time);
-      if (Board.size === aMaxStage) {
-        aMaxStage++;
-      }
       refreshSelectableStage();
       this.stopGame();
     }
@@ -475,7 +466,7 @@
     request.addEventListener('readystatechange', () => {
       if (request.readyState === 4 && request.status === 200) {
         max_stage = parseInt(
-            JSON.parse(request.responseText).highest_level_beaten);
+            JSON.parse(request.responseText).highest_level_beaten) + 1;
       }
     });
 
@@ -529,7 +520,6 @@
         document.getElementById('games-won-data').innerHTML = user.games_won;
         document.getElementById(
             'highest-level-beaten-data').innerHTML = user.highest_level_beaten;
-        aMaxStage = parseInt(user.highest_level_beaten);
       }
     });
   }
