@@ -11,7 +11,7 @@ if (isset($_SESSION['user'])) {
     header('Location: fifteen_puzzle.php');
 }
 ?>
-<form action="SessionController.php" method="POST" align="center">
+<form id="login-form" action="SessionController.php" method="POST">
   <label for="username">username:</label>
   <input id="username" type="text" name="username" required><br>
 
