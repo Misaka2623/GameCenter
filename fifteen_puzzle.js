@@ -459,6 +459,7 @@
   function refreshSelectableStage() {
     const value = document.getElementById('highest-level-beaten-data').innerHTML;
     const max_stage = /^[0-9]+.?[0-9]*/.test(value) ? kMinStage : parseInt(value);
+    console.log(max_stage);
 
     const select = document.getElementById('select-stage');
     select.innerHTML = '';
