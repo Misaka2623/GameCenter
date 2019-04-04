@@ -43,13 +43,25 @@
 
     _loginCount;
 
-    _gamePlayed;
+    _gamesPlayed;
 
     _gamesWon;
 
     _highestLevelBeaten;
 
     // _scores;
+
+    show() {
+      document.getElementById('username-data').innerHTML = this._username;
+      document.getElementById('signup-date-data').innerHTML = this._signupDate;
+      document.getElementById('last-login-data').innerHTML = this._lastLogin;
+      document.getElementById('login-count-data').innerHTML = this._loginCount;
+      document.getElementById(
+          'games-played-data').innerHTML = this._gamesPlayed;
+      document.getElementById('games-won-data').innerHTML = this._gamesWon;
+      document.getElementById(
+          'highest-level-beaten-data').innerHTML = this._highestLevelBeaten;
+    }
   }
 
   /**
@@ -524,5 +536,8 @@
         addEventListener('click', () => board.stopGame());
 
     kScores.get(Board.size).show();
+
+    const user = new User();
+    user.show();
   });
 })();

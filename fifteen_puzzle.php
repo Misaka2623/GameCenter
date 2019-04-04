@@ -41,31 +41,31 @@ if (!isset($_SESSION['user'])) {
   <table id="user-info">
     <tr>
       <th>username</th>
-      <th>undefined</th>
+      <th id="username-data"></th>
     </tr>
     <tr>
       <td>signup date</td>
-      <td>undefined</td>
+      <td id="signup-date-data"></td>
     </tr>
     <tr>
       <td>last login</td>
-      <td>undefined</td>
+      <td id="last-login-data"></td>
     </tr>
     <tr>
       <td>login count</td>
-      <td>undefined</td>
+      <td id="login-count-data"></td>
     </tr>
     <tr>
       <td>games played</td>
-      <td>undefined</td>
+      <td id="games-played-data"></td>
     </tr>
     <tr>
       <td>games won</td>
-      <td>undefined</td>
+      <td id="games-won-data"></td>
     </tr>
     <tr>
       <td>highest level beaten</td>
-      <td>undefined</td>
+      <td id="highest-level-beaten-data"></td>
     </tr>
   </table>
 </div>
