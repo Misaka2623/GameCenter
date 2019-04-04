@@ -14,7 +14,7 @@ if(isset($_SESSION['user'])){
 
     // add new game record
     if(isset($_POST['new_record'])){
-        $db_manager->newRecord($_SESSION['user'], $_GET['new_record']);
+        $db_manager->newRecord($_SESSION['user'], $_POST['new_record']);
         unset($_POST['new_record']);
     }
 
