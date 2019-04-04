@@ -478,7 +478,7 @@
       this._initializeSquares();
 
       let request = new XMLHttpRequest();
-      request.open('GET', 'SessionController.php', true);
+      request.open('POST', 'SessionController.php', true);
       request.send(`new_record=${Board.size - 1}`);
 
       aStartTime = Date.now();
