@@ -32,36 +32,17 @@
    */
   const kScores = new Map();
 
-  class User {
-    _username;
-
-    _password;
-
-    _signupDate;
-
-    _lastLogin;
-
-    _loginCount;
-
-    _gamesPlayed;
-
-    _gamesWon;
-
-    _highestLevelBeaten;
-
     // _scores;
 
-    show() {
-      document.getElementById('username-data').innerHTML = this._username;
-      document.getElementById('signup-date-data').innerHTML = this._signupDate;
-      document.getElementById('last-login-data').innerHTML = this._lastLogin;
-      document.getElementById('login-count-data').innerHTML = this._loginCount;
-      document.getElementById(
-          'games-played-data').innerHTML = this._gamesPlayed;
-      document.getElementById('games-won-data').innerHTML = this._gamesWon;
-      document.getElementById(
-          'highest-level-beaten-data').innerHTML = this._highestLevelBeaten;
-    }
+  function showUser(user) {
+    document.getElementById('username-data').innerHTML = user.username;
+    document.getElementById('signup-date-data').innerHTML = user.signup_date;
+    document.getElementById('last-login-data').innerHTML = user.last_login;
+    document.getElementById('login-count-data').innerHTML = user.login_count;
+    document.getElementById('games-played-data').innerHTML = user.games_played;
+    document.getElementById('games-won-data').innerHTML = user.games_won;
+    document.getElementById(
+        'highest-level-beaten-data').innerHTML = user.highest_level_beaten;
   }
 
   /**
@@ -560,21 +541,17 @@
     });
 
     kScores.get(Board.size).show();
+    const user = new User();
     let request = new XMLHttpRequest();
     request.open('POST', 'SessionController.php', true);
     request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     request.send("user_info=1");
     request.onreadystatechange = function() {
       if (request.readyState === 4 && request.status === 200) {
-        console.log(request.responseText);
         const info = JSON.parse(request.responseText);
-        // for (let row of array) {
-        //   row.push();
-        // }
+        showUser();
       }
     };
 
-    const user = new User();
-    user.show();
   });
 })();
