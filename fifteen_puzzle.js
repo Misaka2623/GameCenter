@@ -564,7 +564,6 @@
     request.open('POST', 'SessionController.php', true);
     request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     request.send("user_info=1");
-    console.log(score);
     request.onreadystatechange = function() {
       if (request.readyState === 4 && request.status === 200) {
         const info = JSON.parse(request.responseText);
