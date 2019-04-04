@@ -246,6 +246,7 @@
         this._data.set(ordinate, square);
       }
       showScore();
+      refreshSelectableStage();
     }
 
     /**
