@@ -15,6 +15,7 @@
 
   window.addEventListener('load', () => {
     const request = new XMLHttpRequest();
+    request.open('POST', 'SessionController.php', true);
     request.setRequestHeader('Content-Type',
         'application/x-www-form-urlencoded');
     request.send("leaderboard=1");
