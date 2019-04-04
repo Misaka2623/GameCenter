@@ -470,9 +470,9 @@
       option.value = i.toString();
       option.innerHTML = (i - 1).toString();
       select.appendChild(option);
-      if (i === Board.size + 1) {
-        option.selected = true;
-      }
+      // if (i === Board.size + 1) {
+      //   option.selected = true;
+      // }
     }
     BOARD.resetGame();
   }
