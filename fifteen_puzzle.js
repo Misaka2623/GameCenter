@@ -99,21 +99,22 @@
      * @description shows the score pad depending on current scores.
      */
     show() {
-      const score_table = document.getElementById('score-pad');
-      const row = document.createElement('tr');
       const header = document.createElement('th');
-      score_table.innerHTML = '';
       header.innerHTML = 'TOP 10';
-      score_table.appendChild(row);
+      const row = document.createElement('tr');
       row.appendChild(document.createElement('th'));
       row.appendChild(header);
+      const score_table = document.getElementById('score-pad');
+      score_table.innerHTML = '';
+      score_table.appendChild(row);
+
       for (let i = 0; i < this._max_remain; i++) {
-        const line = document.createElement('tr');
         const num = document.createElement('td');
         num.innerHTML = i + 1;
         const data = document.createElement('td');
         const score = this._scores[i];
         data.innerHTML = isNaN(score) ? '' : getTimeString(score);
+        const line = document.createElement('tr');
         line.appendChild(num);
         line.appendChild(data);
         score_table.appendChild(line);
@@ -279,42 +280,12 @@
           square.style.backgroundPosition = `${-1 * x * Board._square_size}px` +
               ` ${-1 * y * Board._square_size}px`;
 
-          square.addEventListener('click', () => {
-            if (this._started && this._isAvailableToMove(ordinate)) {
-              this._swap(this._ordinate2index(ordinate),
-                  this._ordinate2index(Board._length));
-              this._show();
-              if (this.isSolved()) {
-                this.endGame();
-              }
-            }
-          });
-          square.addEventListener('mouseenter', () => {
-            if (this._started && this._isAvailableToMove(ordinate)) {
-              square.style.cursor = 'pointer';
-              square.style.borderColor = '#ff0000';
-
-              const empty_square = this._data.get(Board._length);
-              const empty_index = this._ordinate2index(Board._length);
-              const square_index = this._ordinate2index(ordinate);
-              if (empty_index === square_index - 1) {
-                empty_square.style.borderRightColor = '#ff0000';
-              } else if (empty_index === square_index + 1) {
-                empty_square.style.borderLeftColor = '#ff0000';
-              } else if (empty_index === square_index - Board.size) {
-                empty_square.style.borderBottomColor = '#ff0000';
-              } else {
-                empty_square.style.borderTopColor = '#ff0000';
-              }
-            }
-          });
-          square.addEventListener('mouseleave', () => {
-            square.style.cursor = 'default';
-            square.style.borderColor = '#000000';
-            const empty_style = this._data.get(Board._length).style;
-            empty_style.borderColor =
-                empty_style.borderColor.replace('#ff0000', '#000000');
-          });
+          square.addEventListener('click',
+              () => this._mouseClickedSquare(ordinate));
+          square.addEventListener('mouseenter',
+              () => this._mouseEnterSquare(ordinate));
+          square.addEventListener('mouseleave',
+              () => this._mouseLeaveSquare(ordinate));
         }
 
         this._data.set(ordinate, square);
@@ -334,6 +305,65 @@
           || index % Board.size !== 0 && index - 1 === empty
           || index < Board._length && index - Board.size === empty
           || index % Board.size !== Board.size - 1 && index + 1 === empty;
+    }
+
+    /**
+     * @description active when a square is clicked. swap the clicked square
+     * and the empty square if the clicked square is able to swap.
+     * @param {number} ordinate the ordinate of the clicked square.
+     * @private
+     */
+    _mouseClickedSquare(ordinate) {
+      if (this._started && this._isAvailableToMove(ordinate)) {
+        this._swap(this._ordinate2index(ordinate),
+            this._ordinate2index(Board._length));
+        this._show();
+        if (this.isSolved()) {
+          this.endGame();
+        }
+      }
+    }
+
+    /**
+     * @description active when the mouse is entered a square. change the border
+     * color of the square to be red if the clicked square is able to swap.
+     * @param {number} ordinate the ordinate of the square.
+     * @private
+     */
+    _mouseEnterSquare(ordinate) {
+      if (this._started && this._isAvailableToMove(ordinate)) {
+        const square = this._data.get(ordinate);
+        square.style.cursor = 'pointer';
+        square.style.borderColor = '#ff0000';
+
+        const empty_square = this._data.get(Board._length);
+        const empty_index = this._ordinate2index(Board._length);
+        const square_index = this._ordinate2index(ordinate);
+        if (empty_index === square_index - 1) {
+          empty_square.style.borderRightColor = '#ff0000';
+        } else if (empty_index === square_index + 1) {
+          empty_square.style.borderLeftColor = '#ff0000';
+        } else if (empty_index === square_index - Board.size) {
+          empty_square.style.borderBottomColor = '#ff0000';
+        } else {
+          empty_square.style.borderTopColor = '#ff0000';
+        }
+      }
+    }
+
+    /**
+     * @description active when the mouse is leaved a square. change the border
+     * color of the square back to black.
+     * @param {number} ordinate the ordinate of the square.
+     * @private
+     */
+    _mouseLeaveSquare(ordinate) {
+      const square = this._data.get(ordinate);
+      square.style.cursor = 'default';
+      square.style.borderColor = '#000000';
+      const empty_style = this._data.get(Board._length).style;
+      empty_style.borderColor =
+          empty_style.borderColor.replace('#ff0000', '#000000');
     }
 
     /**
