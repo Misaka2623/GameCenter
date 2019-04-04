@@ -19,6 +19,8 @@
    */
   const kMinStage = 2;
 
+  let aMaxStage;
+
   /**
    * @description adds a score into the list.
    * @param {number} score the score which should be added into the list.
@@ -477,24 +479,18 @@
     BOARD.resetGame();
   }
 
-<<<<<<< HEAD
-  let BOARD;
-=======
   window.addEventListener('load', () => {
     aMaxStage = 2;
     refreshSelectableStage();
->>>>>>> parent of 8221763... try to fix bug
-
-  window.addEventListener('load', () => {
-    BOARD = new Board();
+    const board = new Board();
     document.getElementById('start-game').
-        addEventListener('click', () => BOARD.startGame());
+        addEventListener('click', () => board.startGame());
     document.getElementById('reset-game').
-        addEventListener('click', () => BOARD.stopGame());
+        addEventListener('click', () => board.stopGame());
 
     const select = document.getElementById('select-stage');
     select.addEventListener('change', () => {
-      BOARD.resetGame();
+      board.resetGame();
     });
     showScore();
   });
