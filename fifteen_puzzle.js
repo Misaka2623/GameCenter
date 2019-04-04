@@ -461,16 +461,9 @@
    * max stage.
    */
   function refreshSelectableStage() {
-    const value = document.getElementById(
-        'highest-level-beaten-data').innerHTML;
-    console.log(value);
-    const max_stage = /^[0-9]+.?[0-9]*/.test(value) ?
-        parseInt(value) + 2 :
-        kMinStage;
-
     const select = document.getElementById('select-stage');
     select.innerHTML = '';
-    for (let i = kMinStage; i <= max_stage; i++) {
+    for (let i = kMinStage; i <= aMaxStage; i++) {
       const option = document.createElement('option');
       option.value = i.toString();
       option.innerHTML = (i - 1).toString();
