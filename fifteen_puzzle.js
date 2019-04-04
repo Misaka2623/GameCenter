@@ -19,8 +19,6 @@
    */
   const kMinStage = 2;
 
-  const BOARD = new Board();
-
   /**
    * @description adds a score into the list.
    * @param {number} score the score which should be added into the list.
@@ -479,6 +477,8 @@
     }
     BOARD.resetGame();
   }
+
+  const BOARD = new Board();
 
   window.addEventListener('load', () => {
     document.getElementById('start-game').
