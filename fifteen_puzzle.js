@@ -517,7 +517,7 @@
         document.getElementById(
             'highest-level-beaten-data').innerHTML = user.highest_level_beaten;
         aMaxStage = parseInt(user.highest_level_beaten);
-        console.log(aMaxStage);
+        refreshSelectableStage();
       }
     });
   }
