@@ -457,18 +457,8 @@
    * max stage.
    */
   function refreshSelectableStage() {
-    let max_stage = kMinStage;
-    const request = new XMLHttpRequest();
-    request.open('POST', 'SessionController.php', true);
-    request.setRequestHeader('Content-Type',
-        'application/x-www-form-urlencoded');
-    request.send('user_info=1');
-    request.addEventListener('readystatechange', () => {
-      if (request.readyState === 4 && request.status === 200) {
-        max_stage = parseInt(
-            JSON.parse(request.responseText).highest_level_beaten) + 1;
-      }
-    });
+    const value = document.getElementById('highest-level-beaten-data').innerHTML;
+    const max_stage = /^[0-9]+.?[0-9]*/.test(value) ? kMinStage : parseInt(value);
 
     const select = document.getElementById('select-stage');
     select.innerHTML = '';
