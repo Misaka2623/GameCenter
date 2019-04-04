@@ -26,7 +26,7 @@ class DatabaseManager{
             // compare password
             $row = $result->fetch_assoc();
             if(password_verify($password, $row['hashed_password'])){
-                $sql_query = "UPDATE user_info SET last_login = CURRENT_TIMESTAMP(), login_count = login_count + 1 WHERE username = $username";
+                $sql_query = "UPDATE user_info SET last_login = CURRENT_TIMESTAMP(), login_count = login_count + 1 WHERE username = '$username'";
                 $this->connection->query($sql_query);
                 return true;
             }
@@ -39,7 +39,7 @@ class DatabaseManager{
         return true;
     }
     public function newRecord($username, $level){
-        $sql_query = "UPDATE user_info SET games_played = games_played + 1 WHERE username = $username";
+        $sql_query = "UPDATE user_info SET games_played = games_played + 1 WHERE username = '$username'";
         $result = $this->connection->query($sql_query);
     }
 
@@ -60,7 +60,7 @@ class DatabaseManager{
     }
 
     public function getUserInfo($username){
-        $sql_query = "SELECT * FROM user_info WHERE username = $username";
+        $sql_query = "SELECT * FROM user_info WHERE username = '$username'";
         $result = $this->connection->query($sql_query);
         return $result->fetch_assoc();
     }
