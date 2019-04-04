@@ -547,6 +547,7 @@
     request.send("user_info=1");
     request.onreadystatechange = function() {
       if (request.readyState === 4 && request.status === 200) {
+        console.log(request.responseText);
         const info = JSON.parse(request.responseText);
         showUser();
       }
