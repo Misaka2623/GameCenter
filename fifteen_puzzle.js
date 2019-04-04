@@ -1,8 +1,6 @@
 (function() {
   'use strict';
 
-  // TODO(sheng): reset game button -> end game
-
   /**
    * @description the number for stopping the timer.
    * @type {number}
@@ -410,19 +408,14 @@
      * @description ends the game.
      */
     endGame() {
-      clearInterval(aNumber);
+      this.stopGame();
       const time = Date.now() - aStartTime;
       if (!kScores.has(Board.size)) {
         kScores.set(Board.size, new ScorePad());
       }
-      kScores.get(Board.size).addScores(time);
       setTimeout(() => window.alert(
           `complete! used ${getTimeString(time)}`), 200);
-      document.getElementById('timer').value = '0:00:00';
-      document.getElementById('start-game').disabled = false;
-      document.getElementById('reset-game').disabled = true;
-      document.getElementById('select-stage').disabled = false;
-      this._started = false;
+      kScores.get(Board.size).addScores(time);
       aMaxStage++;
     }
 
@@ -436,11 +429,17 @@
     }
 
     /**
-     * @description resets the game.
+     * @description stops the game.
      */
-    resetGame() {
+    stopGame() {
       clearInterval(aNumber);
-      this.startGame();
+      document.getElementById('timer').value = '0:00:00';
+      document.getElementById('start-game').disabled = false;
+      document.getElementById('reset-game').disabled = true;
+      document.getElementById('select-stage').disabled = false;
+      this._started = false;
+      this._initializeSquares();
+      this._show();
     }
 
     /**
@@ -508,7 +507,7 @@
     document.getElementById('start-game').
         addEventListener('click', () => board.startGame());
     document.getElementById('reset-game').
-        addEventListener('click', () => board.resetGame());
+        addEventListener('click', () => board.stopGame());
 
     kScores.get(Board.size).show();
   });
