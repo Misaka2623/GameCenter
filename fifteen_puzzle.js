@@ -249,10 +249,10 @@
     _initializeSquares() {
       Board.size = parseInt(document.getElementById('select-stage').value);
       this._ordinates.splice(0, this._ordinates.length);
-      this._data.clear();
       for (let ordinate = 1; ordinate <= Board._length; ordinate++) {
         this._ordinates.push(ordinate);
       }
+      this._data.clear();
 
       for (const ordinate of this._ordinates) {
         const coordinate = Board.ordinate2coordinate(ordinate);
@@ -425,6 +425,7 @@
           `complete! used ${getTimeString(time)}`), 200);
       kScores.get(Board.size).addScores(time);
       aMaxStage++;
+      refreshSelectableStage();
     }
 
     /**
@@ -501,16 +502,19 @@
   function refreshSelectableStage() {
     const select = document.getElementById('select-stage');
     select.innerHTML = '';
-    for (let i = kMinStage + 1; i <= aMaxStage; i++) {
+    for (let i = kMinStage; i <= aMaxStage; i++) {
       const option = document.createElement('option');
       option.value = i.toString();
-      option.innerHTML = i.toString();
+      option.innerHTML = (i - 1).toString();
       select.appendChild(option);
+      if (i === aMaxStage) {
+        option.selected = true;
+      }
     }
   }
 
   window.addEventListener('load', () => {
-    aMaxStage = 10;
+    aMaxStage = 2;
     refreshSelectableStage();
 
     const board = new Board();
