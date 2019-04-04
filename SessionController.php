@@ -31,6 +31,13 @@ if(isset($_SESSION['user'])){
     else if(isset($_POST['level_scores'])){
         $scores = $db_manager->getLevelScoreBoard($_POST['level_scores']);
         echo json_encode($scores);
+        unset($_POST['level_scores']);
+    }
+    // get leader board
+    else if(isset($_POST['leaderboard'])){
+        $leaderboard = $db_manager->getLeaderBoard();
+        echo json_encode($leaderboard);
+        unset($_POST['leaderboard']);
     }
 }
 // attempt to login

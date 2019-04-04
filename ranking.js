@@ -17,12 +17,12 @@
     const request = new XMLHttpRequest();
     request.setRequestHeader('Content-Type',
         'application/x-www-form-urlencoded');
-    request.send(`best_stage=1&count=${MAX_COUNT}`);
+    request.send("leaderboard=1");
     request.addEventListener('readystatechange', () => {
       if (request.readyState === 4 && request.status === 200) {
         const arr = JSON.parse(request.responseText);
         for (const obj of arr) {
-
+          addData(obj.username, obj.highest_level_beaten);
         }
       }
     });
