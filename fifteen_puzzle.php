@@ -70,5 +70,7 @@ if (!isset($_SESSION['user'])) {
   </table>
 </div>
 <div id="logout-container">
-  <button id="logout">logout</button>
+  <form action='SessionController.php' method='POST'>
+  <input type='submit' id='Logout' name='Logout' value='Log Out'>
+  </form>";
 </div>

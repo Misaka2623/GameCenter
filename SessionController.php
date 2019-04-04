@@ -6,7 +6,8 @@ session_start();
 // when logged in
 if(isset($_SESSION['user'])){
     // attempt to logout
-    if(isset($_POST['logout'])){
+    if(isset($_POST['Logout'])){
+        unset($_POST['Logout']);
         session_destroy();
         header('Location: index.php');
     }
