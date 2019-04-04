@@ -64,9 +64,7 @@ th,
 td,
 th {
   border-style: solid;
-  padding: 5px;
-  margin-left: 5px;
-  margin-right: 5px;
+  padding: 5px 10px;
 }
 
 #user-info {
