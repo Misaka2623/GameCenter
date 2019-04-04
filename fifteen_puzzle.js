@@ -476,7 +476,6 @@
       //   option.selected = true;
       // }
     }
-    BOARD.resetGame();
   }
 
   window.addEventListener('load', () => {
