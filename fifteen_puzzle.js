@@ -368,7 +368,6 @@
       setTimeout(() => window.alert(
           `complete! used ${getTimeString(time)}`), 100);
       addScores(time);
-      refreshSelectableStage();
       this.stopGame();
     }
 
@@ -492,7 +491,6 @@
       BOARD.resetGame();
     });
     showScore();
-    refreshSelectableStage();
   });
 
   function showUser() {
