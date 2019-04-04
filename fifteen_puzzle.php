@@ -7,10 +7,6 @@ if (!isset($_SESSION['user'])) {
 }
 ?>
 
-<meta charset="UTF-8">
-<title>Fifteen Puzzle</title>
-<link href="fifteen_puzzle.css" rel="stylesheet">
-<script src="fifteen_puzzle.js"></script>
 <div id="side1">
   <table id="score-pad">
     <tr>
@@ -18,8 +14,6 @@ if (!isset($_SESSION['user'])) {
       <th>TOP 10</th>
     </tr>
   </table>
-  <p id="ranking-page-link-text">
-    <a href="" id="ranking-page-link">click</a> to ge to the ranking page</p>
 </div>
 <div id="main">
   <div id="timer-container">
@@ -35,6 +29,8 @@ if (!isset($_SESSION['user'])) {
       <option selected value="2">1</option>
     </select>
   </div>
+  <p id="ranking-page-link-text">
+    <a href="" id="ranking-page-link">click</a> to ge to the ranking page</p>
 </div>
 <div id="side2">
   <table id="user-info">
@@ -69,7 +65,5 @@ if (!isset($_SESSION['user'])) {
   </table>
 </div>
 <div id="logout-container">
-  <form action='SessionController.php' method='POST'>
-  <input type='submit' id='Logout' name='Logout' value='Log Out'>
-  </form>
+  <button id="logout">logout</button>
 </div>
