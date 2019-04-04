@@ -479,6 +479,7 @@
 
       let request = new XMLHttpRequest();
       request.open('POST', 'SessionController.php', true);
+      request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
       request.send(`new_record=${Board.size - 1}`);
 
       aStartTime = Date.now();

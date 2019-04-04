@@ -41,9 +41,8 @@ class DatabaseManager{
 
 
     public function newRecord($username, $level){
-        $sql_query = "UPDATE user_info SET games_played = games_played + 1 WHERE username = '$username'";
+        $sql_query = "UPDATE user_info SET games_played = games_played + 1 WHERE username = $username";
         $result = $this->connection->query($sql_query);
-        echo "here";
     }
 
     public function newScore($username, $level, $time_cost){
