@@ -133,7 +133,7 @@
         const num = document.createElement('td');
         num.innerHTML = i + 1;
         const username = document.createElement('td');
-        username.innerHTML=
+        // username.innerHTML=
         const data = document.createElement('td');
         const score = this._scores[i];
         data.innerHTML = isNaN(score) ? '' : getTimeString(score);
