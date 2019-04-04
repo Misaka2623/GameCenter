@@ -466,14 +466,26 @@
    * max stage.
    */
   function refreshSelectableStage() {
+    let max_stage = kMinStage;
+    const request = new XMLHttpRequest();
+    request.setRequestHeader('Content-Type',
+        'application/x-www-form-urlencoded');
+    request.send('user_info=1');
+    request.addEventListener('readystatechange', () => {
+      if (request.readyState === 4 && request.status === 200) {
+        max_stage = parseInt(
+            JSON.parse(request.responseText).highest_level_beaten);
+      }
+    });
+
     const select = document.getElementById('select-stage');
     select.innerHTML = '';
-    for (let i = kMinStage; i <= aMaxStage; i++) {
+    for (let i = kMinStage; i <= max_stage; i++) {
       const option = document.createElement('option');
       option.value = i.toString();
       option.innerHTML = (i - 1).toString();
       select.appendChild(option);
-      if (i === aMaxStage) {
+      if (i === max_stage) {
         option.selected = true;
       }
     }
@@ -517,7 +529,6 @@
         document.getElementById(
             'highest-level-beaten-data').innerHTML = user.highest_level_beaten;
         aMaxStage = parseInt(user.highest_level_beaten);
-        refreshSelectableStage();
       }
     });
   }
