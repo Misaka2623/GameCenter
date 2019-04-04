@@ -14,12 +14,16 @@
   let aStartTime;
 
   /**
+   * @description the max stage number that the player can choose.
+   * @type {number}
+   */
+  let aMaxStage;
+
+  /**
    * @description the min stage number that the player can choose.
    * @type {number}
    */
   const kMinStage = 2;
-
-  let aMaxStage;
 
   /**
    * @description adds a score into the list.
@@ -245,8 +249,6 @@
 
         this._data.set(ordinate, square);
       }
-      showScore();
-      refreshSelectableStage();
     }
 
     /**
@@ -371,10 +373,12 @@
       setTimeout(() => window.alert(
           `complete! used ${getTimeString(time)}`), 100);
       addScores(time);
-      this.stopGame();
-      // if (aMaxStage === Board.size) {
+      if (Board.size === aMaxStage) {
         aMaxStage++;
-      // }
+      }
+      refreshSelectableStage();
+      this.stopGame();
+      showScore();
     }
 
     /**
@@ -469,15 +473,16 @@
       option.value = i.toString();
       option.innerHTML = (i - 1).toString();
       select.appendChild(option);
-      // if (i === Board.size + 1) {
-      //   option.selected = true;
-      // }
+      if (i === aMaxStage) {
+        option.selected = true;
+      }
     }
   }
 
   window.addEventListener('load', () => {
     aMaxStage = 2;
     refreshSelectableStage();
+
     const board = new Board();
     document.getElementById('start-game').
         addEventListener('click', () => board.startGame());
@@ -513,6 +518,5 @@
             'highest-level-beaten-data').innerHTML = user.highest_level_beaten;
       }
     });
-    console.log('haha');
   }
 })();
