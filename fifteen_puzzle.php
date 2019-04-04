@@ -16,7 +16,8 @@ if (!isset($_SESSION['user'])) {
   <table id="score-pad">
     <tr>
       <th></th>
-      <th>TOP 10</th>
+      <th>username</th>
+      <th>time cost</th>
     </tr>
   </table>
 </div>

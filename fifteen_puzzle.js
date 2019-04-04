@@ -26,72 +26,60 @@
   const kMinStage = 2;
 
   /**
-   * @description a map stores all stage map to the user high scores.
-   * @type {Map<number, ScorePad>}
-   * @see ScorePad
+   * @description adds a score into the list.
+   * @param {number} score the score which should be added into the list.
    */
-  const kScores = new Map();
+  function addScores(score) {
+    const request = new XMLHttpRequest();
+    request.open('POST', 'SessionController.php', true);
+    request.setRequestHeader('Content-Type',
+        'application/x-www-form-urlencoded');
+    request.send(`new_score=${score}&cur_level=${Board.size - 1}`);
+  }
 
-    // _scores;
+  /**
+   * @description shows the score pad depending on current scores.
+   */
+  function showScore() {
+    const header1 = document.createElement('th');
+    header1.innerHTML = 'TOP 10';
+    const header2 = document.createElement('th');
+    header2.innerHTML = 'username';
+    const header3 = document.createElement('th');
+    header3.innerHTML = 'time cost';
+    const row = document.createElement('tr');
+    row.appendChild(header1);
+    row.appendChild(header2);
+    row.appendChild(header3);
+    const score_table = document.getElementById('score-pad');
+    score_table.innerHTML = '';
+    score_table.appendChild(row);
 
-
-    /**
-     * @description adds a score into the list.
-     * @param {number} score the score which should be added into the list.
-     */
-    function addScores(score) {
-      this._scores.push(score);
-      this._scores.sort((a, b) => a - b);
-
-      let request = new XMLHttpRequest();
-      request.open('POST', 'SessionController.php', true);
-      request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      request.send(`new_score=${score}&cur_level=${Board.size - 1}`);
-      //showScore();
-      //showUser();
-    }
-
-    /**
-     * @description shows the score pad depending on current scores.
-     */
-    function showScore() {
-      const header1 = document.createElement('th');
-      header1.innerHTML = 'TOP 10';
-      const header2 = document.createElement('th');
-      header2.innerHTML = 'username';
-      const header3 = document.createElement('th');
-      header3.innerHTML = 'timecost';
-      const row = document.createElement('tr');
-      row.appendChild(header1);
-      row.appendChild(header2);
-      row.appendChild(header3);
-      const score_table = document.getElementById('score-pad');
-      score_table.innerHTML = '';
-      score_table.appendChild(row);
-
-      request.open('POST', 'SessionController.php', true);
-      request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      request.send(`level_scores=${Board.size - 1}`);
-      request.onreadystatechange = function() {
-        if (request.readyState === 4 && request.status === 200) {
-          const scores = JSON.parse(request.responseText);
-          for (const score of scores) {
-            const num = document.createElement('td');
-            num.innerHTML = i + 1;
-            const username = document.createElement('td');
-            username.innerHTML = score.player;
-            const data = document.createElement('td');
-            data.innerHTML = getTimeString(parseInt(score.time_cost));
-            const line = document.createElement('tr');
-            line.appendChild(num);
-            line.appendChild(username);
-            line.appendChild(data);
-            score_table.appendChild(line);
-          }
-    
+    const request = new XMLHttpRequest();
+    request.open('POST', 'SessionController.php', true);
+    request.setRequestHeader('Content-Type',
+        'application/x-www-form-urlencoded');
+    request.send(`level_scores=${Board.size - 1}`);
+    request.onreadystatechange = function() {
+      if (request.readyState === 4 && request.status === 200) {
+        const scores = JSON.parse(request.responseText);
+        for (const score of scores) {
+          const num = document.createElement('td');
+          num.innerHTML = i + 1;
+          const username = document.createElement('td');
+          username.innerHTML = score.player;
+          const data = document.createElement('td');
+          data.innerHTML = getTimeString(parseInt(score.time_cost));
+          const line = document.createElement('tr');
+          line.appendChild(num);
+          line.appendChild(username);
+          line.appendChild(data);
+          score_table.appendChild(line);
         }
-      };
-    }
+
+      }
+    };
+  }
 
   /**
    * @description an instance of this class refers a puzzle game board.
@@ -384,12 +372,9 @@
      */
     endGame() {
       const time = Date.now() - aStartTime;
-      if (!kScores.has(Board.size)) {
-        kScores.set(Board.size, new ScorePad());
-      }
       setTimeout(() => window.alert(
           `complete! used ${getTimeString(time)}`), 100);
-      kScores.get(Board.size).addScores(time);
+      addScores(time);
       aMaxStage++;
       refreshSelectableStage();
       this.stopGame();
@@ -434,7 +419,8 @@
 
       let request = new XMLHttpRequest();
       request.open('POST', 'SessionController.php', true);
-      request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      request.setRequestHeader('Content-Type',
+          'application/x-www-form-urlencoded');
       request.send(`new_record=${Board.size - 1}`);
 
       aStartTime = Date.now();
@@ -503,27 +489,31 @@
     select.addEventListener('change', () => {
       board.resetGame();
     });
-    kScores.get(Board.size).show();
-
+    showScore();
   });
+
   function showUser() {
     let request = new XMLHttpRequest();
     request.open('POST', 'SessionController.php', true);
-    request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    request.send("user_info=1");
+    request.setRequestHeader('Content-Type',
+        'application/x-www-form-urlencoded');
+    request.send('user_info=1');
     request.onreadystatechange = function() {
       if (request.readyState === 4 && request.status === 200) {
         const user = JSON.parse(request.responseText);
         document.getElementById('username-data').innerHTML = user.username;
-        document.getElementById('signup-date-data').innerHTML = user.signup_date;
+        document.getElementById(
+            'signup-date-data').innerHTML = user.signup_date;
         document.getElementById('last-login-data').innerHTML = user.last_login;
-        document.getElementById('login-count-data').innerHTML = user.login_count;
-        document.getElementById('games-played-data').innerHTML = user.games_played;
+        document.getElementById(
+            'login-count-data').innerHTML = user.login_count;
+        document.getElementById(
+            'games-played-data').innerHTML = user.games_played;
         document.getElementById('games-won-data').innerHTML = user.games_won;
         document.getElementById(
             'highest-level-beaten-data').innerHTML = user.highest_level_beaten;
-          }
+      }
     };
-    console.log("haha");
+    console.log('haha');
   }
 })();
