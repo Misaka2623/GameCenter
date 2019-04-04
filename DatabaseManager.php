@@ -66,7 +66,7 @@ class DatabaseManager{
     }
     
     public function getLevelScoreboard($level){
-        $sql_query = "SELECT player, time_cost FROM game_records WHERE game_level = $level ORDER BY time_cost";
+        $sql_query = "SELECT player, time_cost FROM game_records WHERE game_level = $level ORDER BY time_cost LIMIT 10";
         $result = $this->connection->query($sql_query);
         while($row = $result->fetch_assoc()){
             $rows[] = $row;
@@ -75,7 +75,7 @@ class DatabaseManager{
     }
 
     public function getLeaderBoard(){
-        $sql_query = "SELECT username, games_played, games_won, highest_level_beaten FROM user_info ORDER BY highest_level_beaten";
+        $sql_query = "SELECT username, games_played, games_won, highest_level_beaten FROM user_info ORDER BY highest_level_beaten LIMIT 10";
         $result = $this->connection->query($sql_query);
         while($row = $result->fetch_assoc()){
             $rows[] = $row;

@@ -26,8 +26,6 @@ if(isset($_SESSION['user'])){
     else if(isset($_POST['new_score']) && isset($_POST['cur_level'])){
         $db_manager->newScore($_SESSION['user'], $_POST['cur_level'], $_POST['new_score']);
         unset($_POST['new_score']);
-        $updated_score = $db_manager->getLevelScoreBoard($_POST['cur_level']);
-        echo json_encode($updated_score);
     }
     // get level scoreboard
     else if(isset($_POST['level_scores'])){

@@ -35,31 +35,11 @@
     // _scores;
 
 
-  /**
-   * @description a storage for storing the scores.
-   */
-  class ScorePad {
-    /**
-     * @description the max items that can be shown on the page.
-     * @const
-     * @type {number}
-     * @private
-     */
-    _max_remain = 10;
-
-    /**
-     * @description an array contains all scores.
-     * @const
-     * @type {Map<string, number>}
-     * @private
-     */
-    _scores = [];
-
     /**
      * @description adds a score into the list.
      * @param {number} score the score which should be added into the list.
      */
-    addScores(score) {
+    function addScores(score) {
       this._scores.push(score);
       this._scores.sort((a, b) => a - b);
 
@@ -67,27 +47,14 @@
       request.open('POST', 'SessionController.php', true);
       request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
       request.send(`new_score=${score}&cur_level=${Board.size - 1}`);
-      console.log(score);
-      request.onreadystatechange = function() {
-        if (request.readyState === 4 && request.status === 200) {
-          // for (const json of request.responseText)
-
-          const array = JSON.parse(request.responseText);
-          console.log(array);
-          // for (let row of array) {
-          //   row.push();
-          // }
-        }
-      };
-
-      this.show();
-      showUser();
+      //showScore();
+      //showUser();
     }
 
     /**
      * @description shows the score pad depending on current scores.
      */
-    show() {
+    function showScore() {
       const header1 = document.createElement('th');
       header1.innerHTML = 'TOP 10';
       const header2 = document.createElement('th');
@@ -102,21 +69,29 @@
       score_table.innerHTML = '';
       score_table.appendChild(row);
 
-      for (let i = 0; i < this._max_remain; i++) {
-        const num = document.createElement('td');
-        num.innerHTML = i + 1;
-        const username = document.createElement('td');
-        // username.innerHTML=
-        const data = document.createElement('td');
-        const score = this._scores[i];
-        data.innerHTML = isNaN(score) ? '' : getTimeString(score);
-        const line = document.createElement('tr');
-        line.appendChild(num);
-        line.appendChild(data);
-        score_table.appendChild(line);
-      }
+      request.open('POST', 'SessionController.php', true);
+      request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      request.send(`level_scores=${Board.size - 1}`);
+      request.onreadystatechange = function() {
+        if (request.readyState === 4 && request.status === 200) {
+          const scores = JSON.parse(request.responseText);
+          for (const score of scores) {
+            const num = document.createElement('td');
+            num.innerHTML = i + 1;
+            const username = document.createElement('td');
+            username.innerHTML = score.player;
+            const data = document.createElement('td');
+            data.innerHTML = getTimeString(parseInt(score.time_cost));
+            const line = document.createElement('tr');
+            line.appendChild(num);
+            line.appendChild(username);
+            line.appendChild(data);
+            score_table.appendChild(line);
+          }
+    
+        }
+      };
     }
-  }
 
   /**
    * @description an instance of this class refers a puzzle game board.
@@ -369,11 +344,7 @@
         const square = this._data.get(ordinate);
         container.appendChild(square);
       }
-
-      if (!kScores.has(Board.size)) {
-        kScores.set(Board.size, new ScorePad());
-      }
-      kScores.get(Board.size).show();
+      showScore();
     }
 
     /**
