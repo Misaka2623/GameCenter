@@ -79,9 +79,10 @@
     addScores(score) {
       this._scores.push(score);
       this._scores.sort((a, b) => a - b);
+
       let request = new XMLHttpRequest();
       request.open('POST', 'SessionController.php', true);
-      request.send('new_score=' + score + '&cur_level=' + Board.size);
+      request.send(`new_score=${score}&cur_level=${Board.size}`);
       request.onreadystatechange = function() {
         if (request.readyState === 4 && request.status === 200) {
           let array = JSON.parse(request.responseText);
@@ -90,6 +91,7 @@
           }
         }
       };
+
       this.show();
     }
 
@@ -447,9 +449,11 @@
      */
     startGame() {
       this._initializeSquares();
+
       let request = new XMLHttpRequest();
       request.open('POST', 'SessionController.php', true);
-      request.send('new_record=' + (Board.size - 1));
+      request.send(`new_record=${Board.size - 1}`);
+
       aStartTime = Date.now();
       while (this.isSolved()) {
         this._shuffle();
