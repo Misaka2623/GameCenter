@@ -560,6 +560,19 @@
     });
 
     kScores.get(Board.size).show();
+    let request = new XMLHttpRequest();
+    request.open('POST', 'SessionController.php', true);
+    request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    request.send("user_info=1");
+    request.onreadystatechange = function() {
+      if (request.readyState === 4 && request.status === 200) {
+        console.log(request.responseText);
+        const info = JSON.parse(request.responseText);
+        // for (let row of array) {
+        //   row.push();
+        // }
+      }
+    };
 
     const user = new User();
     user.show();

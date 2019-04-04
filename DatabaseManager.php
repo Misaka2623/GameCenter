@@ -38,8 +38,6 @@ class DatabaseManager{
         $this->connection->query($sql_query);
         return true;
     }
-
-
     public function newRecord($username, $level){
         $sql_query = "UPDATE user_info SET games_played = games_played + 1 WHERE username = $username";
         $result = $this->connection->query($sql_query);
@@ -62,11 +60,9 @@ class DatabaseManager{
     }
 
     public function getUserInfo($username){
-        $sql_query = "SELECT * FROM user_info WHERE username = '$username'";
+        $sql_query = "SELECT * FROM user_info WHERE username = $username";
         $result = $this->connection->query($sql_query);
-        if($result->num_rows > 0){
-            return $result->fetch_assoc();   
-        }
+        return $result->fetch_assoc();
     }
     
     public function getLevelScoreboard($level){
