@@ -35,6 +35,7 @@
     request.setRequestHeader('Content-Type',
         'application/x-www-form-urlencoded');
     request.send(`new_score=${score}&cur_level=${Board.size - 1}`);
+    console.log(score);
   }
 
   /**
