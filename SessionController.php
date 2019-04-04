@@ -20,7 +20,7 @@ if(isset($_SESSION['user'])){
 
     // add new score (time cost)
     if(isset($_POST['new_score']) && isset($_POST['cur_level'])){
-        $db_manager->newScore($_SESSION['user'], $_GET['cur_level'], $_POST['new_score']);
+        $db_manager->newScore($_SESSION['user'], $_POST['cur_level'], $_POST['new_score']);
         unset($_POST['new_score']);
         $updated_score = $db_manager->getLevelScoreBoard($_POST['level_scores']);
         echo json_encode($updated_score);

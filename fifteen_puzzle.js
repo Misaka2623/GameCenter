@@ -95,7 +95,7 @@
       let request = new XMLHttpRequest();
       request.open('POST', 'SessionController.php', true);
       request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      request.send(`new_score=${score}&cur_level=${Board.size}`);
+      request.send(`new_score=${score}&cur_level=${Board.size - 1}`);
       request.onreadystatechange = function() {
         if (request.readyState === 4 && request.status === 200) {
           console.log(request.responseText);
