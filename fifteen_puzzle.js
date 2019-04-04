@@ -17,7 +17,7 @@
    * @description the max stage number that the player can choose.
    * @type {number}
    */
-  let aMaxStage;
+  let aMaxStage = 2;
 
   /**
    * @description the min stage number that the player can choose.
