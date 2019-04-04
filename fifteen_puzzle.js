@@ -519,12 +519,6 @@
         document.getElementById('games-won-data').innerHTML = user.games_won;
         document.getElementById(
             'highest-level-beaten-data').innerHTML = user.highest_level_beaten;
-<<<<<<< HEAD
-        if (Board.size !== parseInt(user.highest_level_beaten)) {
-          refreshSelectableStage();
-        }
-=======
->>>>>>> parent of 8221763... try to fix bug
       }
     });
   }
