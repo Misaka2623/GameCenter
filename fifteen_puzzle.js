@@ -374,7 +374,9 @@
       setTimeout(() => window.alert(
           `complete! used ${getTimeString(time)}`), 100);
       addScores(time);
-      aMaxStage++;
+      if (Board.size === aMaxStage) {
+        aMaxStage++;
+      }
       refreshSelectableStage();
       this.stopGame();
     }
