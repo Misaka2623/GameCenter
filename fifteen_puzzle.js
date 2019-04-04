@@ -478,9 +478,10 @@
     BOARD.resetGame();
   }
 
-  const BOARD = new Board();
+  let BOARD;
 
   window.addEventListener('load', () => {
+    BOARD = new Board();
     document.getElementById('start-game').
         addEventListener('click', () => BOARD.startGame());
     document.getElementById('reset-game').
