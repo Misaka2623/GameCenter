@@ -59,10 +59,10 @@ select {
   text-align: center;
 }
 
-#user-info tr td,
-#user-info tr th,
-#score-pad tr td,
-#score-pad tr th {
+td,
+th,
+td,
+th {
   border-style: solid;
   padding: 5px;
 }
