@@ -55,7 +55,12 @@ select {
 #main {
   width: 40%;
 }
-
+#overall {
+  padding: 0;
+  margin: auto;
+  display: inline-block;
+  border: solid 1px black;
+}
 #user-info, #score-pad {
   border-collapse: collapse;
   border-color: #000000;
