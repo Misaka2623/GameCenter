@@ -14,7 +14,7 @@ if(isset($_SESSION['user'])){
     else if(isset($_POST['user_info'])){
         $user_info = $db_manager->getUserInfo($_SESSION['user']);
         unset($_POST['user_info']);
-        echo json_decode($user_info);
+        echo json_encode($user_info);
     }
     // add new game record
     else if(isset($_POST['new_record'])){
