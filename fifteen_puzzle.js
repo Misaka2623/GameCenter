@@ -35,7 +35,6 @@
     request.setRequestHeader('Content-Type',
         'application/x-www-form-urlencoded');
     request.send(`new_score=${score}&cur_level=${Board.size - 1}`);
-    console.log(score);
   }
 
   /**
@@ -456,8 +455,8 @@
     return `${hour}` +
         `:${minute < 10 ? 0 : ''}${minute}` +
         `:${second < 10 ? 0 : ''}${second}` +
-        `:${millisecond < 1000 ? 0 : ''}${millisecond < 100 ? 0 : ''}` +
-        `${millisecond < 10 ? 0 : ''}${millisecond}`;
+        `.${millisecond < 100 ? 0 : ''}${millisecond < 10 ? 0 : ''}` +
+        `${millisecond}`;
   }
 
   /**
