@@ -1,0 +1,21 @@
+body {
+  background-color: #d3d3d3;
+  text-align: center;
+}
+
+h1 {
+  font-family: cursive;
+}
+
+table {
+  border-collapse: collapse;
+  margin: auto;
+  text-align: center;
+  font-family: monospace;
+}
+
+th,
+td {
+  border-style: solid;
+  padding: 5px;
+}
