@@ -41,20 +41,6 @@
    * @description shows the score pad depending on current scores.
    */
   function showScore() {
-    const header1 = document.createElement('th');
-    header1.innerHTML = 'TOP 10';
-    const header2 = document.createElement('th');
-    header2.innerHTML = 'username';
-    const header3 = document.createElement('th');
-    header3.innerHTML = 'time cost';
-    const row = document.createElement('tr');
-    row.appendChild(header1);
-    row.appendChild(header2);
-    row.appendChild(header3);
-    const score_table = document.getElementById('score-pad');
-    score_table.innerHTML = '';
-    score_table.appendChild(row);
-
     const request = new XMLHttpRequest();
     request.open('POST', 'SessionController.php', true);
     request.setRequestHeader('Content-Type',
@@ -62,6 +48,19 @@
     request.send(`level_scores=${Board.size - 1}`);
     request.onreadystatechange = function() {
       if (request.readyState === 4 && request.status === 200) {
+        const header1 = document.createElement('th');
+        header1.innerHTML = 'TOP 10';
+        const header2 = document.createElement('th');
+        header2.innerHTML = 'username';
+        const header3 = document.createElement('th');
+        header3.innerHTML = 'time cost';
+        const row = document.createElement('tr');
+        row.appendChild(header1);
+        row.appendChild(header2);
+        row.appendChild(header3);
+        const score_table = document.getElementById('score-pad');
+        score_table.innerHTML = '';
+        score_table.appendChild(row);
         const scores = JSON.parse(request.responseText);
         let count = 1;
         for (const score of scores) {
