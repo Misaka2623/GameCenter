@@ -566,8 +566,8 @@
     request.send("user_info=1");
     request.onreadystatechange = function() {
       if (request.readyState === 4 && request.status === 200) {
-        const info = JSON.parse(request.responseText);
         console.log(request.responseText);
+        const info = JSON.parse(request.responseText);
         // for (let row of array) {
         //   row.push();
         // }
