@@ -428,16 +428,16 @@
      * @description ends the game.
      */
     endGame() {
-      this.stopGame();
       const time = Date.now() - aStartTime;
       if (!kScores.has(Board.size)) {
         kScores.set(Board.size, new ScorePad());
       }
       setTimeout(() => window.alert(
-          `complete! used ${getTimeString(time)}`), 200);
+          `complete! used ${getTimeString(time)}`), 100);
       kScores.get(Board.size).addScores(time);
       aMaxStage++;
       refreshSelectableStage();
+      this.stopGame();
     }
 
     /**
@@ -447,6 +447,14 @@
     isSolved() {
       return this._ordinates.filter(
           (value, index) => value !== index + 1).length === 0;
+    }
+
+    /**
+     * @description resets the game.
+     */
+    resetGame() {
+      this._initializeSquares();
+      this._show();
     }
 
     /**
@@ -534,6 +542,11 @@
         addEventListener('click', () => board.startGame());
     document.getElementById('reset-game').
         addEventListener('click', () => board.stopGame());
+
+    const select = document.getElementById('select-stage');
+    select.addEventListener('change', () => {
+      board.resetGame();
+    });
 
     kScores.get(Board.size).show();
 
