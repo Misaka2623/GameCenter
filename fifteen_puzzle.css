@@ -55,7 +55,6 @@ select {
 #main {
   width: 40%;
 }
-
 #user-info, #score-pad {
   border-collapse: collapse;
   border-color: #000000;

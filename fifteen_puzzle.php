@@ -11,7 +11,6 @@ if (!isset($_SESSION['user'])) {
 <title>Fifteen Puzzle</title>
 <link href="fifteen_puzzle.css" rel="stylesheet">
 <script src="fifteen_puzzle.js"></script>
-<div id="overall">
 <div id="side1">
   <table id="score-pad">
     <tr>
@@ -74,4 +73,3 @@ if (!isset($_SESSION['user'])) {
   <input type='submit' id='Logout' name='Logout' value='Log Out'>
   </form>
 </div>
-<div id="overall">
