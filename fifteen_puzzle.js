@@ -494,6 +494,7 @@
       board.resetGame();
     });
     showScore();
+    refreshSelectableStage();
   });
 
   function showUser() {
