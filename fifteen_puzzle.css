@@ -18,6 +18,7 @@ body {
   display: inline-block;
   font-family: cursive;
   text-align: center;
+  text-shadow: -2px -2px 0 #d3d3d3, 2px -2px 0 #d3d3d3, -2px 2px 0 #d3d3d3, 2px 2px 0 #d3d3d3;
 }
 
 #timer-container,
@@ -41,10 +42,43 @@ body {
   border-radius: 5px;
 }
 
-#main {
-  width: 70%;
+#side1, #side2 {
+  width: 30%;
 }
 
-#scores {
-  font-family: monospace;
+#side2 {
+  float: right;
+}
+
+#main {
+  width: 40%;
+}
+
+#user-info, #score-pad {
+  border-collapse: collapse;
+  border-color: #000000;
+  margin: 5px;
+  text-align: center;
+}
+
+#user-info tr td,
+#user-info tr th,
+#score-pad tr td,
+#score-pad tr th {
+  border-style: solid;
+  padding: 5px;
+}
+
+#user-info {
+  float: right;
+}
+
+#ranking-page-link-text {
+  margin: 5px;
+}
+
+#logout-container {
+  bottom: 5px;
+  left: 5px;
+  position: absolute;
 }

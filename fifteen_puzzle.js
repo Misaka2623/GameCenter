@@ -1,6 +1,8 @@
 (function() {
   'use strict';
 
+  // TODO(sheng): reset game button -> end game
+
   /**
    * @description the number for stopping the timer.
    * @type {number}
@@ -37,9 +39,19 @@
 
     _password;
 
-    _scores;
+    _signupDate;
 
     _lastLogin;
+
+    _loginCount;
+
+    _gamePlayed;
+
+    _gamesWon;
+
+    _highestLevelBeaten;
+
+    // _scores;
   }
 
   /**
@@ -70,12 +82,12 @@
       this._scores.push(score);
       this._scores.sort((a, b) => a - b);
       let request = new XMLHttpRequest();
-      request.open("POST", "SessionController.php", true);
-      request.send("new_score=" + score + "&cur_level=" + Board.size);
+      request.open('POST', 'SessionController.php', true);
+      request.send('new_score=' + score + '&cur_level=' + Board.size);
       request.onreadystatechange = function() {
         if (request.readyState === 4 && request.status === 200) {
           let array = JSON.parse(request.responseText);
-          for(let row of array){
+          for (let row of array) {
             row.push();
           }
         }
@@ -87,17 +99,24 @@
      * @description shows the score pad depending on current scores.
      */
     show() {
-      const score_list = document.getElementById('scores');
-      score_list.innerHTML = '';
+      const score_table = document.getElementById('score-pad');
+      const row = document.createElement('tr');
+      const header = document.createElement('th');
+      score_table.innerHTML = '';
+      header.innerHTML = 'TOP 10';
+      score_table.appendChild(row);
+      row.appendChild(document.createElement('th'));
+      row.appendChild(header);
       for (let i = 0; i < this._max_remain; i++) {
-        const list_item = document.createElement('li');
+        const line = document.createElement('tr');
+        const num = document.createElement('td');
+        num.innerHTML = i + 1;
+        const data = document.createElement('td');
         const score = this._scores[i];
-        if (isNaN(score)) {
-          list_item.innerHTML = '';
-        } else {
-          list_item.innerHTML = getTimeString(score);
-        }
-        score_list.appendChild(list_item);
+        data.innerHTML = isNaN(score) ? '' : getTimeString(score);
+        line.appendChild(num);
+        line.appendChild(data);
+        score_table.appendChild(line);
       }
     }
   }
@@ -402,6 +421,7 @@
       document.getElementById('timer').value = '0:00:00';
       document.getElementById('start-game').disabled = false;
       document.getElementById('reset-game').disabled = true;
+      document.getElementById('select-stage').disabled = false;
       this._started = false;
       aMaxStage++;
     }
@@ -429,8 +449,8 @@
     startGame() {
       this._initializeSquares();
       let request = new XMLHttpRequest();
-      request.open("POST", "SessionController.php", true);
-      request.send("new_record=" + (Board.size - 1));
+      request.open('POST', 'SessionController.php', true);
+      request.send('new_record=' + (Board.size - 1));
       aStartTime = Date.now();
       while (this.isSolved()) {
         this._shuffle();
@@ -438,6 +458,7 @@
       aNumber = setInterval(countTime, 1000);
       document.getElementById('start-game').disabled = true;
       document.getElementById('reset-game').disabled = false;
+      document.getElementById('select-stage').disabled = true;
       this._started = true;
     }
   }
