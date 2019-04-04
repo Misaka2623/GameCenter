@@ -560,6 +560,20 @@
     });
 
     kScores.get(Board.size).show();
+    let request = new XMLHttpRequest();
+    request.open('POST', 'SessionController.php', true);
+    request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    request.send(`new_score=${score}&cur_level=${Board.size - 1}`);
+    console.log(score);
+    request.onreadystatechange = function() {
+      if (request.readyState === 4 && request.status === 200) {
+        const info = JSON.parse(request.responseText);
+        console.log(request.responseText);
+        // for (let row of array) {
+        //   row.push();
+        // }
+      }
+    };
 
     const user = new User();
     user.show();

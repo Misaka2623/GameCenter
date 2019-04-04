@@ -11,23 +11,26 @@ if(isset($_SESSION['user'])){
         session_destroy();
         header('Location: index.php');
     }
-
+    else if(isset($_POST['user_info'])){
+        $user_info = $db_manager->getUserInfo($_POST['user_info']);
+        unset($_POST['user_info']);
+        echo json_decode($user_info);
+    }
     // add new game record
-    if(isset($_POST['new_record'])){
+    else if(isset($_POST['new_record'])){
         $db_manager->newRecord($_SESSION['user'], $_POST['new_record']);
         unset($_POST['new_record']);
     }
 
     // add new score (time cost)
-    if(isset($_POST['new_score']) && isset($_POST['cur_level'])){
+    else if(isset($_POST['new_score']) && isset($_POST['cur_level'])){
         $db_manager->newScore($_SESSION['user'], $_POST['cur_level'], $_POST['new_score']);
         unset($_POST['new_score']);
         $updated_score = $db_manager->getLevelScoreBoard($_POST['cur_level']);
         echo json_encode($updated_score);
     }
-
     // get level scoreboard
-    if(isset($_POST['level_scores'])){
+    else if(isset($_POST['level_scores'])){
         $scores = $db_manager->getLevelScoreBoard($_POST['level_scores']);
         echo json_encode($scores);
     }
