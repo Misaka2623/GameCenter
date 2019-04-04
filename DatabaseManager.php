@@ -75,7 +75,7 @@ class DatabaseManager{
     }
 
     public function getLeaderBoard(){
-        $sql_query = "SELECT username, highest_level_beaten FROM user_info ORDER BY highest_level_beaten LIMIT 10";
+        $sql_query = "SELECT username, highest_level_beaten FROM user_info ORDER BY highest_level_beaten DESC LIMIT 10";
         $result = $this->connection->query($sql_query);
         while($row = $result->fetch_assoc()){
             $rows[] = $row;
