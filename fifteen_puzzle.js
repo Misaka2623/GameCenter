@@ -63,9 +63,10 @@
     request.onreadystatechange = function() {
       if (request.readyState === 4 && request.status === 200) {
         const scores = JSON.parse(request.responseText);
+        let count = 1;
         for (const score of scores) {
           const num = document.createElement('td');
-          num.innerHTML = i + 1;
+          num.innerHTML = (count++).toString();
           const username = document.createElement('td');
           username.innerHTML = score.player;
           const data = document.createElement('td');
