@@ -5,4 +5,5 @@ body {
 #username,
 #password {
     margin: 5px;
+    padding: 5px;
 }
