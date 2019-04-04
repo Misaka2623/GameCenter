@@ -549,7 +549,7 @@
       if (request.readyState === 4 && request.status === 200) {
         console.log(request.responseText);
         const info = JSON.parse(request.responseText);
-        showUser();
+        showUser(info);
       }
     };
 
