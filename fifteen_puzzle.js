@@ -248,7 +248,6 @@
         }
 
         this._data.set(ordinate, square);
-        showScore();
       }
     }
 
@@ -332,6 +331,7 @@
         const square = this._data.get(ordinate);
         container.appendChild(square);
       }
+      showScore();
     }
 
     /**
@@ -379,7 +379,6 @@
       }
       refreshSelectableStage();
       this.stopGame();
-      showScore();
     }
 
     /**
