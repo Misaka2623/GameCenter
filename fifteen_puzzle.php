@@ -35,7 +35,8 @@ if (!isset($_SESSION['user'])) {
     </select>
   </div>
   <p id="ranking-page-link-text">
-    <a href="" id="ranking-page-link">click</a> to ge to the ranking page</p>
+    <a href="ranking.html" id="ranking-page-link">click</a>
+    to ge to the ranking page</p>
 </div>
 <div id="side2">
   <table id="user-info">
