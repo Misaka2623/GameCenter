@@ -61,7 +61,6 @@
         const score_table = document.getElementById('score-pad');
         score_table.innerHTML = '';
         score_table.appendChild(row);
-        console.log(request.responseText);
         const scores = JSON.parse(request.responseText);
         let count = 1;
         for (const score of scores) {
@@ -518,6 +517,7 @@
         document.getElementById(
             'highest-level-beaten-data').innerHTML = user.highest_level_beaten;
         aMaxStage = parseInt(user.highest_level_beaten);
+        console.log(aMaxStage);
       }
     });
   }
