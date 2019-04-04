@@ -480,7 +480,6 @@
   }
 
   window.addEventListener('load', () => {
-    aMaxStage = 2;
     refreshSelectableStage();
 
     const board = new Board();
@@ -516,6 +515,7 @@
         document.getElementById('games-won-data').innerHTML = user.games_won;
         document.getElementById(
             'highest-level-beaten-data').innerHTML = user.highest_level_beaten;
+        aMaxStage = parseInt(user.highest_level_beaten);
       }
     });
   }
