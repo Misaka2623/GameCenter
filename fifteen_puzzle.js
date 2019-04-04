@@ -468,6 +468,7 @@
   function refreshSelectableStage() {
     let max_stage = kMinStage;
     const request = new XMLHttpRequest();
+    request.open('POST', 'SessionController.php', true);
     request.setRequestHeader('Content-Type',
         'application/x-www-form-urlencoded');
     request.send('user_info=1');
