@@ -53,7 +53,7 @@
      * @type {Map<string, number>}
      * @private
      */
-    _scores = new Map();
+    _scores = [];
 
     /**
      * @description adds a score into the list.
@@ -71,6 +71,7 @@
       request.onreadystatechange = function() {
         if (request.readyState === 4 && request.status === 200) {
           // for (const json of request.responseText)
+
           const array = JSON.parse(request.responseText);
           console.log(array);
           // for (let row of array) {
@@ -80,6 +81,7 @@
       };
 
       this.show();
+      showUser();
     }
 
     /**
