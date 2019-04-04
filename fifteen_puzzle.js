@@ -521,5 +521,6 @@
             'highest-level-beaten-data').innerHTML = user.highest_level_beaten;
       }
     });
+    console.log('haha');
   }
 })();
