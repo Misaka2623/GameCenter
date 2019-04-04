@@ -24,7 +24,7 @@ if (!isset($_SESSION['user'])) {
 <div id="main">
   <div id="timer-container">
     <label for="timer" id="timer-label"></label>
-    <input disabled id="timer" value="0:00:00"/>
+    <input disabled id="timer" value="0:00:00.000"/>
   </div>
   <div id="board"></div>
   <div id="start-game-container">

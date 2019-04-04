@@ -331,7 +331,6 @@
         const square = this._data.get(ordinate);
         container.appendChild(square);
       }
-      showScore();
     }
 
     /**
@@ -379,6 +378,7 @@
       }
       refreshSelectableStage();
       this.stopGame();
+      showScore();
     }
 
     /**
@@ -403,7 +403,7 @@
      */
     stopGame() {
       clearInterval(aNumber);
-      document.getElementById('timer').value = '0:00:00';
+      document.getElementById('timer').value = '0:00:00.000';
       document.getElementById('start-game').disabled = false;
       document.getElementById('reset-game').disabled = true;
       document.getElementById('select-stage').disabled = false;
@@ -428,7 +428,7 @@
       while (this.isSolved()) {
         this._shuffle();
       }
-      aNumber = setInterval(countTime, 1000);
+      aNumber = setInterval(countTime, 1);
       document.getElementById('start-game').disabled = true;
       document.getElementById('reset-game').disabled = false;
       document.getElementById('select-stage').disabled = true;
