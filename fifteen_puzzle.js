@@ -34,16 +34,6 @@
 
     // _scores;
 
-  function showUser(user) {
-    document.getElementById('username-data').innerHTML = user.username;
-    document.getElementById('signup-date-data').innerHTML = user.signup_date;
-    document.getElementById('last-login-data').innerHTML = user.last_login;
-    document.getElementById('login-count-data').innerHTML = user.login_count;
-    document.getElementById('games-played-data').innerHTML = user.games_played;
-    document.getElementById('games-won-data').innerHTML = user.games_won;
-    document.getElementById(
-        'highest-level-beaten-data').innerHTML = user.highest_level_beaten;
-  }
 
   /**
    * @description a storage for storing the scores.
@@ -250,6 +240,7 @@
      * @description initializes all squares on the board.
      */
     _initializeSquares() {
+      showUser();
       Board.size = parseInt(document.getElementById('select-stage').value);
       this._ordinates.splice(0, this._ordinates.length);
       for (let ordinate = 1; ordinate <= Board._length; ordinate++) {
@@ -539,19 +530,26 @@
     select.addEventListener('change', () => {
       board.resetGame();
     });
-
     kScores.get(Board.size).show();
+
+  });
+  function showUser() {
     let request = new XMLHttpRequest();
     request.open('POST', 'SessionController.php', true);
     request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     request.send("user_info=1");
     request.onreadystatechange = function() {
       if (request.readyState === 4 && request.status === 200) {
-        console.log(request.responseText);
-        const info = JSON.parse(request.responseText);
-        showUser(info);
-      }
+        const user = JSON.parse(request.responseText);
+        document.getElementById('username-data').innerHTML = user.username;
+        document.getElementById('signup-date-data').innerHTML = user.signup_date;
+        document.getElementById('last-login-data').innerHTML = user.last_login;
+        document.getElementById('login-count-data').innerHTML = user.login_count;
+        document.getElementById('games-played-data').innerHTML = user.games_played;
+        document.getElementById('games-won-data').innerHTML = user.games_won;
+        document.getElementById(
+            'highest-level-beaten-data').innerHTML = user.highest_level_beaten;
+          }
     };
-
-  });
+  }
 })();
