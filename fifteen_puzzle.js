@@ -459,7 +459,7 @@
   function refreshSelectableStage() {
     const value = document.getElementById('highest-level-beaten-data').innerHTML;
     console.log(value);
-    const max_stage = /^[0-9]+.?[0-9]*/.test(value) ? parseInt(value) + 2 : kMinStage;
+    const max_stage = /^[0-9]+.?[0-9]*/.test(value) ? parseInt(value) + 1 : kMinStage;
 
     const select = document.getElementById('select-stage');
     select.innerHTML = '';
@@ -475,6 +475,7 @@
   }
 
   window.addEventListener('load', () => {
+    showUser();
     refreshSelectableStage();
 
     const board = new Board();
