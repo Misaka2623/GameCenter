@@ -46,7 +46,7 @@
     request.setRequestHeader('Content-Type',
         'application/x-www-form-urlencoded');
     request.send(`level_scores=${Board.size - 1}`);
-    request.onreadystatechange = function() {
+    request.addEventListener('readystatechange', () => {
       if (request.readyState === 4 && request.status === 200) {
         const header1 = document.createElement('th');
         header1.innerHTML = 'TOP 10';
@@ -76,9 +76,8 @@
           line.appendChild(data);
           score_table.appendChild(line);
         }
-
       }
-    };
+    });
   }
 
   /**
@@ -448,13 +447,16 @@
    * @returns {string} the string form of the time.
    */
   function getTimeString(time) {
+    const millisecond = time % 1000;
     time = Math.floor(time / 1000);
     const second = time % 60;
     const minute = Math.floor(time / 60) % 60;
     const hour = Math.floor(time / 3600);
     return `${hour}` +
         `:${minute < 10 ? 0 : ''}${minute}` +
-        `:${second < 10 ? 0 : ''}${second}`;
+        `:${second < 10 ? 0 : ''}${second}` +
+        `:${millisecond < 1000 ? 0 : ''}${millisecond < 100 ? 0 : ''}` +
+        `${millisecond < 10 ? 0 : ''}${millisecond}`;
   }
 
   /**
@@ -498,7 +500,7 @@
     request.setRequestHeader('Content-Type',
         'application/x-www-form-urlencoded');
     request.send('user_info=1');
-    request.onreadystatechange = function() {
+    request.addEventListener('readystatechange', () => {
       if (request.readyState === 4 && request.status === 200) {
         const user = JSON.parse(request.responseText);
         document.getElementById('username-data').innerHTML = user.username;
@@ -513,7 +515,7 @@
         document.getElementById(
             'highest-level-beaten-data').innerHTML = user.highest_level_beaten;
       }
-    };
+    });
     console.log('haha');
   }
 })();
