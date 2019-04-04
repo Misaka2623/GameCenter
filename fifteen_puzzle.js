@@ -19,6 +19,8 @@
    */
   const kMinStage = 2;
 
+  const BOARD = new Board();
+
   /**
    * @description adds a score into the list.
    * @param {number} score the score which should be added into the list.
@@ -457,9 +459,12 @@
    * max stage.
    */
   function refreshSelectableStage() {
-    const value = document.getElementById('highest-level-beaten-data').innerHTML;
+    const value = document.getElementById(
+        'highest-level-beaten-data').innerHTML;
     console.log(value);
-    const max_stage = /^[0-9]+.?[0-9]*/.test(value) ? parseInt(value) + 2 : kMinStage;
+    const max_stage = /^[0-9]+.?[0-9]*/.test(value) ?
+        parseInt(value) + 2 :
+        kMinStage;
 
     const select = document.getElementById('select-stage');
     select.innerHTML = '';
@@ -472,18 +477,18 @@
         option.selected = true;
       }
     }
+    BOARD.resetGame();
   }
 
   window.addEventListener('load', () => {
-    const board = new Board();
     document.getElementById('start-game').
-        addEventListener('click', () => board.startGame());
+        addEventListener('click', () => BOARD.startGame());
     document.getElementById('reset-game').
-        addEventListener('click', () => board.stopGame());
+        addEventListener('click', () => BOARD.stopGame());
 
     const select = document.getElementById('select-stage');
     select.addEventListener('change', () => {
-      board.resetGame();
+      BOARD.resetGame();
     });
     showScore();
     refreshSelectableStage();
@@ -509,7 +514,9 @@
         document.getElementById('games-won-data').innerHTML = user.games_won;
         document.getElementById(
             'highest-level-beaten-data').innerHTML = user.highest_level_beaten;
-        refreshSelectableStage();
+        if (Board.size !== parseInt(user.highest_level_beaten)) {
+          refreshSelectableStage();
+        }
       }
     });
   }
