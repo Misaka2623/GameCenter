@@ -62,7 +62,10 @@ class DatabaseManager{
     public function getUserInfo($username){
         $sql_query = "SELECT * FROM user_info WHERE username = $username";
         $result = $this->connection->query($sql_query);
-        return $result->fetch_assoc();
+        while($row = $result->fetch_assoc()){
+            $rows[] = $row;
+        }
+        return $rows;
     }
     
     public function getLevelScoreboard($level){
