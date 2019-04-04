@@ -85,10 +85,11 @@
       request.send(`new_score=${score}&cur_level=${Board.size}`);
       request.onreadystatechange = function() {
         if (request.readyState === 4 && request.status === 200) {
-          let array = JSON.parse(request.responseText);
-          for (let row of array) {
-            row.push();
-          }
+          const array = JSON.parse(request.responseText);
+          console.log(array);
+          // for (let row of array) {
+          //   row.push();
+          // }
         }
       };
 
