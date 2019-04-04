@@ -79,10 +79,10 @@
     /**
      * @description an array contains all scores.
      * @const
-     * @type {number[]}
+     * @type {Map<string, number>}
      * @private
      */
-    _scores = [];
+    _scores = new Map();
 
     /**
      * @description adds a score into the list.
@@ -99,8 +99,9 @@
       console.log(score);
       request.onreadystatechange = function() {
         if (request.readyState === 4 && request.status === 200) {
-          console.log(request.responseText);
+          // for (const json of request.responseText)
           const array = JSON.parse(request.responseText);
+          console.log(array);
           // for (let row of array) {
           //   row.push();
           // }
@@ -114,11 +115,16 @@
      * @description shows the score pad depending on current scores.
      */
     show() {
-      const header = document.createElement('th');
-      header.innerHTML = 'TOP 10';
+      const header1 = document.createElement('th');
+      header1.innerHTML = 'TOP 10';
+      const header2 = document.createElement('th');
+      header2.innerHTML = 'username';
+      const header3 = document.createElement('th');
+      header3.innerHTML = 'timecost';
       const row = document.createElement('tr');
-      row.appendChild(document.createElement('th'));
-      row.appendChild(header);
+      row.appendChild(header1);
+      row.appendChild(header2);
+      row.appendChild(header3);
       const score_table = document.getElementById('score-pad');
       score_table.innerHTML = '';
       score_table.appendChild(row);
@@ -126,6 +132,8 @@
       for (let i = 0; i < this._max_remain; i++) {
         const num = document.createElement('td');
         num.innerHTML = i + 1;
+        const username = document.createElement('td');
+        username.innerHTML=
         const data = document.createElement('td');
         const score = this._scores[i];
         data.innerHTML = isNaN(score) ? '' : getTimeString(score);
