@@ -250,6 +250,7 @@
 
         this._data.set(ordinate, square);
       }
+      showScore();
     }
 
     /**
@@ -379,7 +380,6 @@
       }
       refreshSelectableStage();
       this.stopGame();
-      showScore();
     }
 
     /**
