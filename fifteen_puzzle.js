@@ -371,6 +371,9 @@
           `complete! used ${getTimeString(time)}`), 100);
       addScores(time);
       this.stopGame();
+      if (aMaxStage === Board.size) {
+        aMaxStage++;
+      }
     }
 
     /**
