@@ -52,7 +52,7 @@ class DatabaseManager{
 
         // get the highest level beaten
         $sql_query = "SELECT MAX(game_level) AS game_level FROM game_records WHERE player = '$username'";
-        $result = $this->conneciton->query($sql_query);
+        $result = $this->connection->query($sql_query);
         $row = $result->fetch_assoc();
         $highest = $row['game_level'];
 
