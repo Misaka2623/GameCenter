@@ -203,14 +203,6 @@
       }
       this._data.clear();
 
-      $('.square').css({
-        'border-width': `${Board._border_width}px`,
-        'font-size': `${Board._square_font_size}pt`,
-        'height': `${Board._square_size - 2 * Board._border_width}px`,
-        'line-height': `${Board._square_size - 2 * Board._border_width}px`,
-        'width': `${Board._square_size - 2 * Board._border_width}px`,
-      });
-
       for (const ordinate of this._ordinates) {
         const coordinate = Board.ordinate2coordinate(ordinate);
         const x = coordinate[0];
@@ -242,6 +234,14 @@
 
         this._data.set(ordinate, square);
       }
+
+      $('.square').css({
+        'border-width': `${Board._border_width}px`,
+        'font-size': `${Board._square_font_size}pt`,
+        'height': `${Board._square_size - 2 * Board._border_width}px`,
+        'line-height': `${Board._square_size - 2 * Board._border_width}px`,
+        'width': `${Board._square_size - 2 * Board._border_width}px`,
+      });
     }
 
     /**
