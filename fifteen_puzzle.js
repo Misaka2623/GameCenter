@@ -212,7 +212,15 @@
         square
             .addClass('square')
             .attr('id', `square_${ordinate}`)
-            .text(ordinate);
+            .text(ordinate)
+            .css({
+              'border-width': `${Board._border_width}px`,
+              'font-size': `${Board._square_font_size}pt`,
+              'height': `${Board._square_size - 2 * Board._border_width}px`,
+              'line-height':
+                  `${Board._square_size - 2 * Board._border_width}px`,
+              'width': `${Board._square_size - 2 * Board._border_width}px`,
+            });
 
         if (ordinate === Board._length) {
           square.css({
@@ -234,14 +242,6 @@
 
         this._data.set(ordinate, square);
       }
-
-      $('.square').css({
-        'border-width': `${Board._border_width}px`,
-        'font-size': `${Board._square_font_size}pt`,
-        'height': `${Board._square_size - 2 * Board._border_width}px`,
-        'line-height': `${Board._square_size - 2 * Board._border_width}px`,
-        'width': `${Board._square_size - 2 * Board._border_width}px`,
-      });
     }
 
     /**
