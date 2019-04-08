@@ -458,7 +458,7 @@
     const select = $('#select-stage').empty();
     for (let i = kMinStage; i <= aMaxStage; i++) {
       const option = $('<option></option>').val(i).text(i - 1);
-      select.appendChild(option);
+      select.append(option);
       if (i === aMaxStage) {
         option.attr('selected', true);
       }
