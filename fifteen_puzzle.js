@@ -48,33 +48,23 @@
     request.send(`level_scores=${Board.size - 1}`);
     request.addEventListener('readystatechange', () => {
       if (request.readyState === 4 && request.status === 200) {
-        const header1 = document.createElement('th');
-        header1.innerHTML = 'TOP 10';
-        const header2 = document.createElement('th');
-        header2.innerHTML = 'username';
-        const header3 = document.createElement('th');
-        header3.innerHTML = 'time cost';
-        const row = document.createElement('tr');
-        row.appendChild(header1);
-        row.appendChild(header2);
-        row.appendChild(header3);
-        const score_table = document.getElementById('score-pad');
-        score_table.innerHTML = '';
-        score_table.appendChild(row);
+        const row = $('<tr></tr>');
+        row.append('<th>TOP 10</th>')
+            .append('<th>username</th>')
+            .append('<th>time cost</th>');
+        const table = $('#score-pad').empty().append(row);
+        /** @namespace score.player */
+        /** @namespace score.time_cost */
         const scores = JSON.parse(request.responseText);
         let count = 1;
         for (const score of scores) {
-          const num = document.createElement('td');
-          num.innerHTML = (count++).toString();
-          const username = document.createElement('td');
-          username.innerHTML = score.player;
-          const data = document.createElement('td');
-          data.innerHTML = getTimeString(parseInt(score.time_cost));
-          const line = document.createElement('tr');
-          line.appendChild(num);
-          line.appendChild(username);
-          line.appendChild(data);
-          score_table.appendChild(line);
+          table.append(
+              $('<tr></tr>')
+                  .append(`<td>${count++}</td>`)
+                  .append(`<td>${score.player}</td>`)
+                  .append(
+                      `<td>${getTimeString(parseInt(score.time_cost))}</td>`),
+          );
         }
       }
     });
@@ -153,7 +143,7 @@
     /**
      * @description stores all html elements of squares on the game board.
      * @const
-     * @type {Map<number, HTMLDivElement>}
+     * @type {Map<number, jQuery>}
      * @private
      */
     _data;
@@ -182,9 +172,10 @@
       this._ordinates = [];
       this._started = false;
 
-      const container = document.getElementById('board');
-      container.style.height = `${Board._board_size}px`;
-      container.style.width = `${Board._board_size}px`;
+      $('#board').css({
+        'height': `${Board._board_size}px`,
+        'width': `${Board._board_size}px`,
+      });
 
       this._initializeSquares();
       this._show();
@@ -205,46 +196,48 @@
      */
     _initializeSquares() {
       showUser();
-      Board.size = parseInt(document.getElementById('select-stage').value);
+      Board.size = parseInt($('#select-stage').val());
       this._ordinates.splice(0, this._ordinates.length);
       for (let ordinate = 1; ordinate <= Board._length; ordinate++) {
         this._ordinates.push(ordinate);
       }
       this._data.clear();
 
+      $('.square').css({
+        'border-width': `${Board._border_width}px`,
+        'font-size': `${Board._square_font_size}pt`,
+        'height': `${Board._square_size - 2 * Board._border_width}px`,
+        'line-height': `${Board._square_size - 2 * Board._border_width}px`,
+        'width': `${Board._square_size - 2 * Board._border_width}px`,
+      });
+
       for (const ordinate of this._ordinates) {
         const coordinate = Board.ordinate2coordinate(ordinate);
         const x = coordinate[0];
         const y = coordinate[1];
 
-        const square = document.createElement('div');
-        square.className = 'square';
-        square.id = `square_${ordinate}`;
-
-        square.style.borderWidth = `${Board._border_width}px`;
-        square.style.fontSize = `${Board._square_font_size}pt`;
-        square.style.height =
-            `${Board._square_size - 2 * Board._border_width}px`;
-        square.style.width =
-            `${Board._square_size - 2 * Board._border_width}px`;
-        square.style.lineHeight = square.style.height;
-        square.innerHTML = ordinate.toString();
+        const square = $('<div></div>');
+        square
+            .addClass('square')
+            .attr('id', `square_${ordinate}`)
+            .text(ordinate);
 
         if (ordinate === Board._length) {
-          square.style.borderColor = '#d3d3d3';
-          square.style.background = 'none';
-          square.style.color = '#d3d3d3';
+          square.css({
+            'border-color': '#e0e0e0',
+            'background': 'none',
+            'color': '#e0e0e0',
+          });
         } else {
-          square.style.borderColor = '#000000';
-          square.style.backgroundPosition = `${-1 * x * Board._square_size}px` +
-              ` ${-1 * y * Board._square_size}px`;
-
-          square.addEventListener('click',
-              () => this._mouseClickedSquare(ordinate));
-          square.addEventListener('mouseenter',
-              () => this._mouseEnterSquare(ordinate));
-          square.addEventListener('mouseleave',
-              () => this._mouseLeaveSquare(ordinate));
+          square
+              .css({
+                'border-color': '#000000',
+                'background-position': `${-1 * x * Board._square_size}px ` +
+                    `${-1 * y * Board._square_size}px`,
+              })
+              .click(() => this._mouseClickedSquare(ordinate))
+              .hover(() => this._mouseEnterSquare(ordinate),
+                  () => this._mouseLeaveSquare(ordinate));
         }
 
         this._data.set(ordinate, square);
@@ -291,9 +284,8 @@
      */
     _mouseEnterSquare(ordinate) {
       if (this._started && this._isAvailableToMove(ordinate)) {
-        const square = this._data.get(ordinate);
-        square.style.cursor = 'pointer';
-        square.style.borderColor = '#ff0000';
+        this._data.get(ordinate)
+            .css({'cursor': 'pointer', 'border-color': '#ff0000'});
       }
     }
 
@@ -304,9 +296,8 @@
      * @private
      */
     _mouseLeaveSquare(ordinate) {
-      const square = this._data.get(ordinate);
-      square.style.cursor = 'default';
-      square.style.borderColor = '#000000';
+      this._data.get(ordinate)
+          .css({'cursor': 'default', 'border-color': '#000000'});
     }
 
     /**
@@ -325,11 +316,10 @@
      * @private
      */
     _show() {
-      const container = document.getElementById('board');
-      container.innerHTML = '';
+      const container = $('#board').empty();
       for (const ordinate of this._ordinates) {
         const square = this._data.get(ordinate);
-        container.appendChild(square);
+        container.append(square);
       }
       showScore();
     }
@@ -403,10 +393,10 @@
      */
     stopGame() {
       clearInterval(aNumber);
-      document.getElementById('timer').value = '0:00:00.000';
-      document.getElementById('start-game').disabled = false;
-      document.getElementById('reset-game').disabled = true;
-      document.getElementById('select-stage').disabled = false;
+      $('#timer').val('0:00:00.000');
+      $('#start-game').attr('disabled', false);
+      $('#reset-game').attr('disabled', true);
+      $('#select-stage').attr('disabled', false);
       this._started = false;
       this._initializeSquares();
       this._show();
@@ -429,9 +419,9 @@
         this._shuffle();
       }
       aNumber = setInterval(countTime, 1);
-      document.getElementById('start-game').disabled = true;
-      document.getElementById('reset-game').disabled = false;
-      document.getElementById('select-stage').disabled = true;
+      $('#start-game').attr('disabled', true);
+      $('#reset-game').attr('disabled', false);
+      $('#select-stage').attr('disabled', true);
       this._started = true;
     }
   }
@@ -440,8 +430,7 @@
    * @description renews the timer on the page.
    */
   function countTime() {
-    const timer = document.getElementById('timer');
-    timer.value = getTimeString(Date.now() - aStartTime);
+    $('#timer').val(getTimeString(Date.now() - aStartTime));
   }
 
   /**
@@ -466,35 +455,29 @@
    * max stage.
    */
   function refreshSelectableStage() {
-    const select = document.getElementById('select-stage');
-    select.innerHTML = '';
+    const select = $('#select-stage').empty();
     for (let i = kMinStage; i <= aMaxStage; i++) {
-      const option = document.createElement('option');
-      option.value = i.toString();
-      option.innerHTML = (i - 1).toString();
+      const option = $('<option></option>').val(i).text(i - 1);
       select.appendChild(option);
       if (i === aMaxStage) {
-        option.selected = true;
+        option.attr('selected', true);
       }
     }
   }
 
-  window.addEventListener('load', () => {
+  $(main);
+
+  function main() {
     aMaxStage = 2;
     refreshSelectableStage();
 
     const board = new Board();
-    document.getElementById('start-game').
-        addEventListener('click', () => board.startGame());
-    document.getElementById('reset-game').
-        addEventListener('click', () => board.stopGame());
+    $('#start-game').click(() => board.startGame());
+    $('#reset-game').click(() => board.stopGame());
+    $('#select-stage').change(() => board.resetGame());
 
-    const select = document.getElementById('select-stage');
-    select.addEventListener('change', () => {
-      board.resetGame();
-    });
     showScore();
-  });
+  }
 
   function showUser() {
     let request = new XMLHttpRequest();
@@ -504,18 +487,20 @@
     request.send('user_info=1');
     request.addEventListener('readystatechange', () => {
       if (request.readyState === 4 && request.status === 200) {
+        /** @namespace user.signup_date */
+        /** @namespace user.last_login */
+        /** @namespace user.login_count */
+        /** @namespace user.games_played */
+        /** @namespace user.games_won */
+        /** @namespace user.highest_level_beaten */
         const user = JSON.parse(request.responseText);
-        document.getElementById('username-data').innerHTML = user.username;
-        document.getElementById(
-            'signup-date-data').innerHTML = user.signup_date;
-        document.getElementById('last-login-data').innerHTML = user.last_login;
-        document.getElementById(
-            'login-count-data').innerHTML = user.login_count;
-        document.getElementById(
-            'games-played-data').innerHTML = user.games_played;
-        document.getElementById('games-won-data').innerHTML = user.games_won;
-        document.getElementById(
-            'highest-level-beaten-data').innerHTML = user.highest_level_beaten;
+        $('#username-data').text(user.username);
+        $('#signup-date-data').text(user.signup_date);
+        $('#last-login-data').text(user.last_login);
+        $('#login-count-data').text(user.login_count);
+        $('#games-played-data').text(user.games_played);
+        $('#games-won-data').text(user.games_won);
+        $('#highest-level-beaten-data').text(user.highest_level_beaten);
       }
     });
   }

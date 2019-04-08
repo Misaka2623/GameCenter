@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
+<meta charset="UTF-8">
+<title>Fifteen Puzzle</title>
+<link href="fifteen_puzzle.css" rel="stylesheet">
+<script src="jquery-3.3.1.min.js"></script>
+<script src="fifteen_puzzle.js"></script>
+
 <?php
 session_start();
 if (!isset($_SESSION['user'])) {
     header('Location: index.php');
 }
 ?>
-
-<meta charset="UTF-8">
-<title>Fifteen Puzzle</title>
-<link href="fifteen_puzzle.css" rel="stylesheet">
-<script src="fifteen_puzzle.js"></script>
 
 <div id="side1">
   <table id="score-pad">
